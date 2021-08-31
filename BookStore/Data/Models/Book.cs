@@ -1,8 +1,9 @@
-﻿namespace BookStore.Data.Models
+﻿using BookStore.Data.Entities;
+
+namespace BookStore.Data.Models
 {
-    public class Book
+    public class Book: BaseEntity
     {
-        public int Id { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
         public int Price { get; set; }
