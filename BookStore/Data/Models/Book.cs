@@ -2,7 +2,7 @@
 
 namespace BookStore.Data.Models
 {
-    public class Book: BaseEntity
+    public class Book : BaseEntity
     {
         public string Description { get; set; }
         public string Image { get; set; }

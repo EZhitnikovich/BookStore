@@ -6,7 +6,7 @@ using BookStore.Data.Entities;
 
 namespace BookStore.Data.Repositories
 {
-    public interface IGenericAsyncRepository<T> where T: BaseEntity
+    public interface IGenericAsyncRepository<T> where T : BaseEntity
     {
         Task<T> GetById(int id);
         Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate);
