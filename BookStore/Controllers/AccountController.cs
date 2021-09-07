@@ -8,15 +8,15 @@ namespace BookStore.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        
+
         [HttpGet]
         public IActionResult Register()
         {
@@ -37,13 +37,8 @@ namespace BookStore.Controllers
                     await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
                 }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
+
+                foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
             }
 
             return View(model);
@@ -52,7 +47,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
-            return View(new LoginViewModel{ReturnUrl = returnUrl});
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
 
         [HttpPost]
@@ -66,13 +61,8 @@ namespace BookStore.Controllers
                 if (result.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
                         return Redirect(model.ReturnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    return RedirectToAction("Index", "Home");
                 }
             }
 
