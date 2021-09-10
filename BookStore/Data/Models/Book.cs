@@ -8,7 +8,6 @@ namespace BookStore.Data.Models
         public string Image { get; set; }
         public int Price { get; set; }
         public int CategoryId { get; set; }
-        public float Rating { get; set; }
         public virtual Category Category { get; set; }
     }
 }

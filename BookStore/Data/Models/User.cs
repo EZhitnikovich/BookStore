@@ -5,6 +5,5 @@ namespace BookStore.Data.Models
 {
     public class User : IdentityUser
     {
-        public List<Book> MarkedBooks { get; set; }
     }
 }
