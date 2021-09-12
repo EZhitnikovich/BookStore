@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using BookStore.Data.Entities;
+using BookStore.Domain;
 
 namespace BookStore.Data.Models
 {

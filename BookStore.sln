@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore", "BookStore\BookStore.csproj", "{687E91FD-1F87-4384-88F7-4E5344A7237F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Domain", "BookStore.Domain\BookStore.Domain.csproj", "{69699E98-CA57-403E-8F18-C189B3A4206E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{687E91FD-1F87-4384-88F7-4E5344A7237F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{687E91FD-1F87-4384-88F7-4E5344A7237F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{687E91FD-1F87-4384-88F7-4E5344A7237F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69699E98-CA57-403E-8F18-C189B3A4206E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69699E98-CA57-403E-8F18-C189B3A4206E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69699E98-CA57-403E-8F18-C189B3A4206E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69699E98-CA57-403E-8F18-C189B3A4206E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
