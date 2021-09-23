@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using BookStore.Domain.Auth;
-using BookStore.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,11 +23,11 @@ namespace BookStore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterRequest model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { Email = model.Email, UserName = model.Username };
+                var user = new ApplicationUser { Email = model.Email, UserName = model.UserName };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -47,12 +46,12 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
-            return View(new LoginViewModel { ReturnUrl = returnUrl });
+            return View(new AuthenticationRequest() { ReturnUrl = returnUrl });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(AuthenticationRequest model)
         {
             if (ModelState.IsValid)
             {
