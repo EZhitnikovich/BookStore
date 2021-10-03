@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BookStore.Domain.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -66,14 +67,6 @@ namespace BookStore.Controllers
             }
 
             return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
         }
     }
 }
