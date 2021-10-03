@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore", "BookStore\Book
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Domain", "BookStore.Domain\BookStore.Domain.csproj", "{69699E98-CA57-403E-8F18-C189B3A4206E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Service", "BookStore.Service\BookStore.Service.csproj", "{11205791-01C9-4B0E-BE29-469F9C906749}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Persistence", "BookStore.Persistence\BookStore.Persistence.csproj", "{26CEC1F2-52D4-480A-BE9D-04EDD3478BDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{69699E98-CA57-403E-8F18-C189B3A4206E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69699E98-CA57-403E-8F18-C189B3A4206E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69699E98-CA57-403E-8F18-C189B3A4206E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11205791-01C9-4B0E-BE29-469F9C906749}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11205791-01C9-4B0E-BE29-469F9C906749}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11205791-01C9-4B0E-BE29-469F9C906749}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11205791-01C9-4B0E-BE29-469F9C906749}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26CEC1F2-52D4-480A-BE9D-04EDD3478BDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26CEC1F2-52D4-480A-BE9D-04EDD3478BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26CEC1F2-52D4-480A-BE9D-04EDD3478BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26CEC1F2-52D4-480A-BE9D-04EDD3478BDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -16,10 +16,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BookStore.Domain\BookStore.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Data\Models" />
+      <ProjectReference Include="..\BookStore.Persistence\BookStore.Persistence.csproj" />
+      <ProjectReference Include="..\BookStore.Service\BookStore.Service.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,4 +1,3 @@
-using BookStore.Data;
 using BookStore.Domain.Auth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using BookStore.Service;
 
 namespace BookStore
 {
@@ -21,9 +21,7 @@ namespace BookStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<AppDbContext>(o => o.UseSqlServer(connection));
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+            services.AddDbIdentity(Configuration);
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
