@@ -21,9 +21,8 @@ namespace BookStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbIdentity(Configuration);
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddAppIdentity(Configuration);
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -37,6 +36,7 @@ namespace BookStore
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
         }

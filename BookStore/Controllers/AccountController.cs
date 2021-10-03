@@ -28,7 +28,7 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { Email = model.Email, UserName = model.UserName };
+                var user = new ApplicationUser { Email = model.Email, UserName = model.FirstName};
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 

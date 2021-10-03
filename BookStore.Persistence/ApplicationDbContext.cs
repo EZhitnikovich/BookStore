@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BookStore.Persistence
 {
     public class ApplicationDbContext: IdentityDbContext<ApplicationUser>, IApplicationDbContext
-    {
+    { 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }

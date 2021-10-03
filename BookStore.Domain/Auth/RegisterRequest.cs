@@ -15,11 +15,6 @@ namespace BookStore.Domain.Auth
         [DataType(DataType.EmailAddress, ErrorMessage = "Invalid email address")]
         [Display(Name = "Email")]
         public string Email { get; set; }
-        
-        [Required]
-        [MinLength(6)]
-        [Display(Name = "Username")]
-        public string UserName { get; set; }
 
         [Required]
         [MinLength(6)]
