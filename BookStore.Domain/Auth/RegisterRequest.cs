@@ -5,9 +5,11 @@ namespace BookStore.Domain.Auth
     public class RegisterRequest
     {
         [Required]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [Required]
@@ -23,9 +25,9 @@ namespace BookStore.Domain.Auth
         public string Password { get; set; }
 
         [Required]
-        [Compare("Password", ErrorMessage = "Passwords don't match")]
+        [Compare(nameof(Password), ErrorMessage = "Passwords don't match")]
         [DataType(DataType.Password)]
-        [Display(Name = "Password confirmation")]
+        [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
     }
 }

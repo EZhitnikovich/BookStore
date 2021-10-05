@@ -41,7 +41,7 @@ namespace BookStore.Controllers
                 foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
             }
 
-            return View(model);
+            return View();
         }
 
         [HttpGet]

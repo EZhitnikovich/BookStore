@@ -11,21 +11,25 @@
         <p>Please fill in this form to create an account.</p>
         <hr>
 
-        <label for="email"><b>First Name</b></label>
+        <label asp-for="Email"></label>
         <input type="text" placeholder="Enter first name" name="FirstName" id="firstName" asp-for="FirstName">
-        <span asp-validation-for="FirstName"/>
+        <span asp-validation-for="FirstName"></span>
         
-        <label for="email"><b>Last Name</b></label>
+        <label asp-for="LastName"></label>
         <input type="text" placeholder="Enter last name" name="LastName" id="lastName" asp-for="LastName">
+        <span asp-validation-for="LastName"></span>
         
-        <label for="email"><b>Email</b></label>
+        <label asp-for="Email"></label>
         <input type="text" placeholder="Enter Email" name="Email" id="email" asp-for="Email">
+        <span asp-validation-for="Email"></span>
 
-        <label for="psw"><b>Password</b></label>
+        <label asp-for="Password"></label>
         <input type="password" placeholder="Enter Password" name="Password" id="psw" asp-for="Password">
+        <span asp-validation-for="Password"></span>
 
-        <label for="psw-repeat"><b>Confirm Password</b></label>
+        <label asp-for="ConfirmPassword"></label>
         <input type="password" placeholder="Repeat Password" name="ConfirmPassword" id="psw-repeat" asp-for="ConfirmPassword">
+        <span asp-validation-for="ConfirmPassword"></span>
         <hr>
 
         <input type="submit" class="registerbtn" value="Register"/>

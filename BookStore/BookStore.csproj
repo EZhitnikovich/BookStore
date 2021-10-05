@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.10">
             <PrivateAssets>all</PrivateAssets>
@@ -17,6 +18,10 @@
       <ProjectReference Include="..\BookStore.Domain\BookStore.Domain.csproj" />
       <ProjectReference Include="..\BookStore.Persistence\BookStore.Persistence.csproj" />
       <ProjectReference Include="..\BookStore.Service\BookStore.Service.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\lib" />
     </ItemGroup>
 
 </Project>
