@@ -28,7 +28,7 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { Email = model.Email, UserName = model.FirstName};
+                var user = new ApplicationUser { Email = model.Email, UserName = model.Email};
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -43,7 +43,7 @@ namespace BookStore.Controllers
 
             return View();
         }
-
+        
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
@@ -64,9 +64,29 @@ namespace BookStore.Controllers
                         return Redirect(model.ReturnUrl);
                     return RedirectToAction("Index", "Home");
                 }
+
+                if (result.IsNotAllowed)
+                {
+                    ModelState.AddModelError("", "Not allowed to login");
+                }
+                else if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError("", "Account blocked. Try after some time.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid credentials");
+                }
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
