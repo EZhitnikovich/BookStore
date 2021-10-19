@@ -26,6 +26,7 @@ namespace BookStore
             services.AddAppIdentity(Configuration);
             
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
             
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
