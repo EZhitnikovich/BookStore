@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BookStore.Domain.Auth;
+using BookStore.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,13 +9,11 @@ namespace BookStore.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAccountRepository _accountRepository;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(IAccountRepository accountRepository)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _accountRepository = accountRepository;
         }
 
         [HttpGet]
@@ -28,20 +27,15 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { Email = model.Email, UserName = model.Email};
-
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await _accountRepository.CreateUserAsync(model);
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
                 }
-
-                foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
             }
 
-            return View();
+            return View(model);
         }
         
         [HttpGet]
@@ -56,12 +50,13 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result =
-                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var result = await _accountRepository.PasswordLoginAsync(model);
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                        return Redirect(model.ReturnUrl);
+                    if (!string.IsNullOrEmpty(model.ReturnUrl))
+                    {
+                        return LocalRedirect(model.ReturnUrl);
+                    }
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -85,7 +80,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await _accountRepository.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }

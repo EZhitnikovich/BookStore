@@ -1,4 +1,6 @@
 using BookStore.Domain.Auth;
+using BookStore.Repositories.Interfaces;
+using BookStore.Repositories.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -22,6 +24,9 @@ namespace BookStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAppIdentity(Configuration);
+            
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
         }
