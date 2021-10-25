@@ -1,10 +1,9 @@
 ﻿using BookStore.Domain.Auth;
-using BookStore.Domain.Entities;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using BookStore.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BookStore.Service
 {

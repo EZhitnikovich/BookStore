@@ -1,14 +1,11 @@
-using BookStore.Domain.Auth;
 using BookStore.Repositories.Interfaces;
 using BookStore.Repositories.Repository;
+using BookStore.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BookStore.Service;
 
 namespace BookStore
 {
@@ -24,10 +21,10 @@ namespace BookStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAppIdentity(Configuration);
-            
+
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
-            
+
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
         }
@@ -43,10 +40,7 @@ namespace BookStore
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
         }
     }
 }

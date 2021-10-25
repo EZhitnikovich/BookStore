@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BookStore.Repositories.Repository
 {
-    public class AccountRepository: IAccountRepository
+    public class AccountRepository : IAccountRepository
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public AccountRepository(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
@@ -16,7 +16,7 @@ namespace BookStore.Repositories.Repository
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        
+
         public async Task<ApplicationUser> GetUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
@@ -24,7 +24,7 @@ namespace BookStore.Repositories.Repository
 
         public async Task<IdentityResult> CreateUserAsync(RegisterRequest request)
         {
-            var user = new ApplicationUser()
+            var user = new ApplicationUser
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,

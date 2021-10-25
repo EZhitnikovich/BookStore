@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Repositories.Repository
 {
-    public class GenericRepository<TEntity>: IGenericRepository<TEntity> where TEntity : BaseEntity
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         private readonly ApplicationDbContext _context;
         protected readonly DbSet<TEntity> DbSet;
@@ -18,7 +18,7 @@ namespace BookStore.Repositories.Repository
             _context = context;
             DbSet = _context.Set<TEntity>();
         }
-        
+
         public async Task<int> Add(TEntity entity)
         {
             if (entity is null)
@@ -36,7 +36,7 @@ namespace BookStore.Repositories.Repository
             if (entity is null)
                 //TODO: add custom exception
                 throw new Exception($"{nameof(entity)} is null");
-            
+
             DbSet.Remove(entity);
             await _context.SaveChangesAsync();
         }

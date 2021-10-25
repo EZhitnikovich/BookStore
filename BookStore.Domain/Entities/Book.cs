@@ -1,6 +1,6 @@
 ﻿namespace BookStore.Domain.Entities
 {
-    public class Book: BaseEntity
+    public class Book : BaseEntity
     {
         public string BookName { get; set; }
         public string Description { get; set; }

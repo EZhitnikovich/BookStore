@@ -4,7 +4,7 @@ using BookStore.Domain;
 
 namespace BookStore.Repositories.Interfaces
 {
-    public interface IGenericRepository<TEntity> where TEntity: BaseEntity
+    public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         Task<int> Add(TEntity entity);
         Task Delete(TEntity book);

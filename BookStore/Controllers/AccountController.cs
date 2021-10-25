@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BookStore.Domain.Auth;
 using BookStore.Repositories.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
@@ -29,19 +27,16 @@ namespace BookStore.Controllers
             {
                 var result = await _accountRepository.CreateUserAsync(model);
 
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                if (result.Succeeded) return RedirectToAction("Index", "Home");
             }
 
             return View(model);
         }
-        
+
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
-            return View(new AuthenticationRequest() { ReturnUrl = returnUrl });
+            return View(new AuthenticationRequest { ReturnUrl = returnUrl });
         }
 
         [HttpPost]
@@ -53,25 +48,16 @@ namespace BookStore.Controllers
                 var result = await _accountRepository.PasswordLoginAsync(model);
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl))
-                    {
-                        return LocalRedirect(model.ReturnUrl);
-                    }
+                    if (!string.IsNullOrEmpty(model.ReturnUrl)) return LocalRedirect(model.ReturnUrl);
                     return RedirectToAction("Index", "Home");
                 }
 
                 if (result.IsNotAllowed)
-                {
                     ModelState.AddModelError("", "Not allowed to login");
-                }
                 else if (result.IsLockedOut)
-                {
                     ModelState.AddModelError("", "Account blocked. Try after some time.");
-                }
                 else
-                {
                     ModelState.AddModelError("", "Invalid credentials");
-                }
             }
 
             return View(model);

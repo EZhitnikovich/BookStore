@@ -1,4 +1,6 @@
-* {box-sizing: border-box}
+* {
+    box-sizing: border-box
+}
 
 /* Add padding to containers */
 .container {
@@ -39,7 +41,7 @@ hr {
 }
 
 .registerbtn:hover {
-    opacity:1;
+    opacity: 1;
 }
 
 /* Add a blue text color to links */
