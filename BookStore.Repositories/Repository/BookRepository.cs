@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BookStore.Domain.Entities;
 using BookStore.Persistence;
@@ -8,51 +9,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Repositories.Repository
 {
-    public class BookRepository: IBookRepository
+    public class BookRepository: GenericRepository<Book>, IBookRepository
     {
-        private readonly ApplicationDbContext _context;
-
-        public BookRepository(ApplicationDbContext context)
+        public BookRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
-        }
-        
-        public async Task<int> AddBook(Book book)
-        {
-            if (book is null)
-                //TODO: add custom exception
-                throw new Exception($"{nameof(book)} is null");
-
-            await _context.Books.AddAsync(book);
-            await _context.SaveChangesAsync();
-
-            return book.Id;
         }
 
-        public async Task DeleteBook(Book book)
+        public async Task<Book> FindByName(string name)
         {
-            if (book is null)
-                //TODO: add custom exception
-                throw new Exception($"{nameof(book)} is null");
+            Book book = null;
             
-            _context.Books.Remove(book);
-            await _context.SaveChangesAsync();
-        }
+            for (var i = 0; i < DbSet.Count(); i++)
+            {
+                if (DbSet.ElementAt(i).BookName.ToLower() == name.ToLower())
+                {
+                    book = DbSet.ElementAt(i);
+                }
+            }
 
-        public async Task UpdateBook(Book book)
-        {
-            _context.Books.Update(book);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<Book> GetBookById(int id)
-        {
-            return await _context.Books.FindAsync(id);
-        }
-
-        public async Task<IReadOnlyList<Book>> GetAllBooks()
-        {
-            return await _context.Books.ToListAsync();
+            return book;
         }
     }
 }

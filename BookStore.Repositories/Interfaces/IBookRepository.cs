@@ -7,10 +7,6 @@ namespace BookStore.Repositories.Interfaces
 {
     public interface IBookRepository
     {
-        Task<int> AddBook(Book book);
-        Task DeleteBook(Book book);
-        Task UpdateBook(Book book);
-        Task<Book> GetBookById(int id);
-        Task<IReadOnlyList<Book>> GetAllBooks();
+        Task<Book> FindByName(string name);
     }
 }
