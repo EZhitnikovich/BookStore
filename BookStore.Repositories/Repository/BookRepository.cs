@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BookStore.Domain.Entities;
 using BookStore.Persistence;
@@ -14,13 +15,35 @@ namespace BookStore.Repositories.Repository
 
         public async Task<Book> FindByName(string name)
         {
+            var books = await GetAll();
             Book book = null;
 
-            for (var i = 0; i < DbSet.Count(); i++)
-                if (DbSet.ElementAt(i).BookName.ToLower() == name.ToLower())
-                    book = DbSet.ElementAt(i);
+            for (var i = 0; i < books.Count; i++)
+                if (books[i].BookName.ToLower() == name.ToLower())
+                {
+                    book = books[i];
+                    break;
+                }
 
             return book;
+        }
+
+        public async Task<IReadOnlyList<Book>> GetByIds(IEnumerable<int> ids)
+        {
+            var books = await GetAll();
+
+            var list = new List<Book>();
+            var enumerable = ids.ToList();
+
+            for (int i = 0; i < books.Count; i++)
+            {
+                if (enumerable.Any(e => books[i].Id == e))
+                {
+                    list.Add(books[i]);
+                }
+            }
+
+            return list;
         }
     }
 }
