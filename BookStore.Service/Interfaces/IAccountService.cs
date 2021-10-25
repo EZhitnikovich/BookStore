@@ -2,9 +2,9 @@
 using BookStore.Domain.Auth;
 using Microsoft.AspNetCore.Identity;
 
-namespace BookStore.Repositories.Interfaces
+namespace BookStore.Service.Interfaces
 {
-    public interface IAccountRepository
+    public interface IAccountService
     {
         Task<ApplicationUser> GetUserByEmailAsync(string email);
         Task<IdentityResult> CreateUserAsync(RegisterRequest model);

@@ -1,16 +1,16 @@
 ﻿using System.Threading.Tasks;
 using BookStore.Domain.Auth;
-using BookStore.Repositories.Interfaces;
+using BookStore.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
-namespace BookStore.Repositories.Repository
+namespace BookStore.Service
 {
-    public class AccountRepository : IAccountRepository
+    public class AccountService : IAccountService
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AccountRepository(UserManager<ApplicationUser> userManager,
+        public AccountService(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;

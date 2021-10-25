@@ -1,17 +1,18 @@
 ﻿using System.Threading.Tasks;
 using BookStore.Domain.Auth;
 using BookStore.Repositories.Interfaces;
+using BookStore.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountService _accountService;
 
-        public AccountController(IAccountRepository accountRepository)
+        public AccountController(IAccountService accountService)
         {
-            _accountRepository = accountRepository;
+            _accountService = accountService;
         }
 
         [HttpGet]
@@ -25,7 +26,7 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountRepository.CreateUserAsync(model);
+                var result = await _accountService.CreateUserAsync(model);
 
                 if (result.Succeeded) return RedirectToAction("Index", "Home");
             }
@@ -45,7 +46,7 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountRepository.PasswordLoginAsync(model);
+                var result = await _accountService.PasswordLoginAsync(model);
                 if (result.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(model.ReturnUrl)) return LocalRedirect(model.ReturnUrl);
@@ -66,7 +67,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await _accountRepository.SignOutAsync();
+            await _accountService.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }

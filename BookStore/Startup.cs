@@ -1,6 +1,7 @@
 using BookStore.Repositories.Interfaces;
 using BookStore.Repositories.Repository;
 using BookStore.Service;
+using BookStore.Service.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,7 @@ namespace BookStore
         {
             services.AddAppIdentity(Configuration);
 
-            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IBookRepository, BookRepository>();
 
             services.AddControllersWithViews();
