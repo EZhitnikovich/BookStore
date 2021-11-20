@@ -22,7 +22,7 @@ namespace BookStore.Service
             return await _userManager.FindByEmailAsync(email);
         }
 
-        public async Task<IdentityResult> CreateUserAsync(RegisterRequest request)
+        public Task<IdentityResult> CreateUserAsync(RegisterRequest request)
         {
             var user = new ApplicationUser
             {
@@ -32,9 +32,7 @@ namespace BookStore.Service
                 UserName = request.Email
             };
 
-            var result = await _userManager.CreateAsync(user, request.Password);
-
-            return result;
+            return _userManager.CreateAsync(user, request.Password);
         }
 
         public async Task<SignInResult> PasswordLoginAsync(AuthenticationRequest request)

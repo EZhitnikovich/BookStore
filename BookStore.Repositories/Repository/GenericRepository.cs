@@ -19,6 +19,10 @@ namespace BookStore.Repositories.Repository
             DbSet = _context.Set<TEntity>();
         }
 
+        protected GenericRepository()
+        {
+        }
+
         public async Task<int> Add(TEntity entity)
         {
             if (entity is null)

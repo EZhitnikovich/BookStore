@@ -13,9 +13,12 @@ namespace BookStore.Repositories.Repository
         {
         }
 
-        public async Task<Book> FindByName(string name)
+        public BookRepository()
         {
-            var books = await GetAll();
+        }
+
+        public async Task<Book> FindByName(string name, List<Book> books)
+        {
             Book book = null;
 
             for (var i = 0; i < books.Count; i++)
@@ -28,21 +31,71 @@ namespace BookStore.Repositories.Repository
             return book;
         }
 
-        public async Task<IReadOnlyList<Book>> GetByIds(IEnumerable<int> ids)
+        public async Task<IReadOnlyList<Book>> GetByIds(ISet<int> ids, List<Book> books)
         {
-            var books = await GetAll();
-
             var list = new List<Book>();
             var enumerable = ids.ToList();
 
-            for (int i = 0; i < books.Count; i++)
+            foreach (var id in enumerable)
             {
-                if (enumerable.Any(e => books[i].Id == e))
+                foreach (var book in books)
                 {
-                    list.Add(books[i]);
+                    if (book.Id == id)
+                    {
+                        list.Add(book);
+                        break;
+                    }
                 }
             }
 
+            return list;
+        }
+
+        public async Task<IReadOnlyList<Book>> GetWithFilter(string name, Category category, List<Book> books)
+        {
+            var list = new List<Book>();
+
+            foreach (var book in books)
+                if (book.BookName.ToLower().Contains(name.ToLower()) &&
+                    book.Category.Equals(category))
+                    list.Add(book);
+
+            return list;
+        }
+
+        public async Task<IReadOnlyList<Book>> GetSortedBooks(List<Book> books)
+        {
+            for (var s = books.Count/2; s > 0; s/=2)
+            {
+                for (var i = 0; i < books.Count; i++)
+                {
+                    for (var j = i+s; j < books.Count; j+=s)
+                    {
+                        if (books[i].Id > books[j].Id)
+                        {
+                            var book = books[j];
+                            books[j] = books[i];
+                            books[i] = book;
+                        }
+                    }
+                }
+            }
+
+            return books;
+        }
+
+        public async Task<IReadOnlyList<Book>> GetByPrice(float lower, float higher, List<Book> books)
+        {
+            var list = new List<Book>();
+            
+            foreach (var book in books)
+            {
+                if (book.Price > lower && book.Price < higher)
+                {
+                    list.Add(book);
+                }
+            }
+            
             return list;
         }
     }
