@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Collections.Generic;
+using BookStore.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookStore.Domain.Auth
 {
@@ -6,5 +8,7 @@ namespace BookStore.Domain.Auth
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public List<Rating> MarkedBooks { get; set; }
     }
 }
