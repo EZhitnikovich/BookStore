@@ -7,5 +7,7 @@
 
 @foreach (var book in Model)
 {
-    <p>@book.Id @book.BookName</p> <a asp-controller="Book" asp-action="EditBook" asp-route-id="@book.Id">edit</a>
+    <p>@book.Id @book.BookName</p>
+    <a asp-controller="Book" asp-action="EditBook" asp-route-id="@book.Id">edit</a>
+    <a asp-controller="Book" asp-action="DeleteBook" asp-route-id="@book.Id">delete</a>
 }

@@ -1,0 +1,26 @@
+﻿@model BookStore.Domain.ViewModels.AddBookViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<a asp-action="DeleteBook" asp-controller="Book" asp-route-ready="@true">да</a>
+<a asp-action="DeleteBook" asp-controller="Book" asp-route-ready="@false">нет</a>
+
+<form method="post" asp-controller="Book" asp-action="AddCategory">
+    <div class="container">
+        <h2>@Model.BookName</h2>
+        <h2>@Model.Description</h2>
+        <h2>@Model.Image</h2>
+        <h2>@Model.Price</h2>
+        <h2>@Model.CategoryId</h2>
+        
+        <p>Удалить?</p>
+
+        <hr>
+
+        <input type="submit" asp-action="DeleteBook" asp-controller="Book" asp-route-ready="@true" value="Да">
+        <input type="submit" asp-action="DeleteBook" asp-controller="Book" asp-route-ready="@false" value="нет">
+    </div>
+</form>

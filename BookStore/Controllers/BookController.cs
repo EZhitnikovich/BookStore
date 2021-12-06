@@ -119,6 +119,44 @@ namespace BookStore.Controllers
                 return RedirectToAction("Index", "Home");
             }
             
+            return View(model);
+        }
+        
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public IActionResult DeleteBook(int id)
+        {
+            var book = _applicationDbContext.Books.Find(id);
+
+            if (book != null)
+            {
+                var addBookViewModel = new AddBookViewModel()
+                {
+                    BookName = book.BookName,
+                    CategoryId = book.CategoryId,
+                    Description = book.Description,
+                    Image = book.Image,
+                    Price = book.Price
+                };
+                return View(addBookViewModel);
+            }
+            
+            return NotFound();
+        }
+        
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteBook(int id, bool ready)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ready)
+                {
+                    _applicationDbContext.Remove(_applicationDbContext.Books.Find(id));
+                    await _applicationDbContext.SaveChangesAsync();
+                }
+                return RedirectToAction("BookList", "Book");
+            }
             return View();
         }
 
