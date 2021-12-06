@@ -224,5 +224,40 @@ namespace BookStore.Controllers
             
             return View();
         }
+        
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public IActionResult DeleteCategory(int id)
+        {
+            var category = _applicationDbContext.Categories.Find(id);
+
+            if (category != null)
+            {
+                var addCategoryViewModel = new AddCategoryViewModel()
+                {
+                    CategoryName = category.CategoryName,
+                    Description = category.Description
+                };
+                return View(addCategoryViewModel);
+            }
+            
+            return NotFound();
+        }
+        
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(int id, bool ready)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ready)
+                {
+                    _applicationDbContext.Remove(_applicationDbContext.Categories.Find(id));
+                    await _applicationDbContext.SaveChangesAsync();
+                }
+                return RedirectToAction("CategoryList", "Book");
+            }
+            return View();
+        }
     }
 }

@@ -5,9 +5,6 @@
     Layout = "_Layout";
 }
 
-<a asp-action="DeleteBook" asp-controller="Book" asp-route-ready="@true">да</a>
-<a asp-action="DeleteBook" asp-controller="Book" asp-route-ready="@false">нет</a>
-
 <form method="post" asp-controller="Book" asp-action="AddCategory">
     <div class="container">
         <h2>@Model.BookName</h2>

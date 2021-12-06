@@ -7,5 +7,7 @@
 
 @foreach (var category in Model)
 {
-    <p>@category.Id @category.CategoryName</p> <a asp-controller="Book" asp-action="EditCategory" asp-route-id="@category.Id">edit</a>
+    <p>@category.Id @category.CategoryName</p>
+    <a asp-controller="Book" asp-action="EditCategory" asp-route-id="@category.Id">edit</a>
+    <a asp-controller="Book" asp-action="DeleteCategory" asp-route-id="@category.Id">delete</a>
 }
