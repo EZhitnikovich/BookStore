@@ -10,6 +10,7 @@
         <h1>AddBook</h1>
         <p>Please fill in this form to add book.</p>
         <hr>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
 
         <div>
             <label asp-for="BookName"></label>
@@ -31,7 +32,7 @@
 
         <div>
             <label asp-for="Price"></label>
-            <input type="text" placeholder="Enter Price" name="Price" id="Price" asp-for="Price">
+            <input placeholder="Enter Price" name="Price" id="Price" asp-for="Price">
             <span asp-validation-for="Price"></span>
         </div>
 

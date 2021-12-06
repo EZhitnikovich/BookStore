@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using BookStore.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Domain.ViewModels
 {

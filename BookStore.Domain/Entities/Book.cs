@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Domain.Entities
 {
+    [Index(nameof(BookName), IsUnique = true)]
     public class Book : BaseEntity
     {
         public string BookName { get; set; }

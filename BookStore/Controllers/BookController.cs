@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BookStore.Domain.Entities;
 using BookStore.Domain.ViewModels;
@@ -35,8 +36,15 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBook(AddBookViewModel model)
         {
+            ViewBag.Categories = new SelectList(_applicationDbContext.Categories, "Id", "CategoryName");
             if (ModelState.IsValid)
             {
+                if (_applicationDbContext.Books.Any(x => x.BookName == model.BookName))
+                {
+                    ModelState.AddModelError("", "Книга уже есть в списке");
+                    return View();
+                }
+                
                 var book = new Book()
                 {
                     BookName = model.BookName,
@@ -45,7 +53,6 @@ namespace BookStore.Controllers
                     Image = model.Image,
                     Price = model.Price
                 };
-                
                 _applicationDbContext.Add(book);
                 await _applicationDbContext.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
