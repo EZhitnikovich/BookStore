@@ -22,7 +22,7 @@ namespace BookStore.Service
             return await _userManager.FindByEmailAsync(email);
         }
 
-        public Task<IdentityResult> CreateUserAsync(RegisterRequest request)
+        public async Task<IdentityResult> CreateUserAsync(RegisterRequest request)
         {
             var user = new ApplicationUser
             {
@@ -31,8 +31,9 @@ namespace BookStore.Service
                 Email = request.Email,
                 UserName = request.Email
             };
-
-            return _userManager.CreateAsync(user, request.Password);
+            
+            var result = await _userManager.CreateAsync(user, request.Password);
+            return await _userManager.AddToRoleAsync(user, "user");
         }
 
         public async Task<SignInResult> PasswordLoginAsync(AuthenticationRequest request)
@@ -43,6 +44,16 @@ namespace BookStore.Service
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<ApplicationUser> FindById(string id)
+        {
+            return await _userManager.FindByIdAsync(id);
+        }
+        
+        public async Task<ApplicationUser> FindByEmail(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
         }
     }
 }

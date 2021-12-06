@@ -15,6 +15,18 @@ namespace BookStore.Controllers
             _accountService = accountService;
         }
 
+        public async Task<IActionResult> Index(string email)
+        {
+            var user = await _accountService.FindByEmail(email);
+
+            if (user != null)
+            {
+                return View(user);
+            }
+            
+            return NotFound();
+        }
+        
         [HttpGet]
         public IActionResult Register()
         {
@@ -27,7 +39,7 @@ namespace BookStore.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _accountService.CreateUserAsync(model);
-
+                
                 if (result.Succeeded) return RedirectToAction("Index", "Home");
             }
 

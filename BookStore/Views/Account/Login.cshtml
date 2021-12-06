@@ -4,3 +4,33 @@
     ViewBag.Title = "Log in";
     Layout = "_Layout";
 }
+
+<form method="post" asp-controller="Account" asp-action="Login">
+    <div class="container">
+        <h1>Register</h1>
+        <p>Please fill in this form to create an account.</p>
+        <hr>
+
+        <div>
+            <label asp-for="Email"></label>
+            <input type="text" placeholder="Enter Email" name="Email" id="email" asp-for="Email">
+            <span asp-validation-for="Email"></span>
+        </div>
+
+        <div>
+            <label asp-for="Password"></label>
+            <input type="password" placeholder="Enter Password" name="Password" id="psw" asp-for="Password">
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div>
+            <label asp-for="RememberMe"></label>
+            <input type="checkbox" name="RememberMe" asp-for="RememberMe">
+            <span asp-validation-for="RememberMe"></span>
+        </div>
+
+        <hr>
+
+        <input type="submit" class="loginbtn" value="Login"/>
+    </div>
+</form>
