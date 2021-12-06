@@ -18,10 +18,23 @@ namespace BookStore.Controllers
         {
             _applicationDbContext = applicationDbContext;
         }
-        
+
+        [Authorize(Roles = "admin")]
         public IActionResult Index()
         {
             return View();
+        }
+        
+        [Authorize(Roles = "admin")]
+        public IActionResult BookList()
+        {
+            return View(_applicationDbContext.Books.ToList());
+        }
+        
+        [Authorize(Roles = "admin")]
+        public IActionResult CategoryList()
+        {
+            return View(_applicationDbContext.Categories.ToList());
         }
 
         [Authorize(Roles = "admin")]
@@ -31,7 +44,7 @@ namespace BookStore.Controllers
             ViewBag.Categories = new SelectList(_applicationDbContext.Categories, "Id", "CategoryName");
             return View();
         }
-        
+
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddBook(AddBookViewModel model)
@@ -44,7 +57,7 @@ namespace BookStore.Controllers
                     ModelState.AddModelError("", "Книга уже есть в списке");
                     return View();
                 }
-                
+
                 var book = new Book()
                 {
                     BookName = model.BookName,
@@ -57,9 +70,58 @@ namespace BookStore.Controllers
                 await _applicationDbContext.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
+
             return View();
         }
-        
+
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public IActionResult EditBook(int id)
+        {
+            ViewBag.Categories = new SelectList(_applicationDbContext.Categories, "Id", "CategoryName");
+            var book = _applicationDbContext.Books.Find(id);
+
+            if (book != null)
+            {
+                var addBookViewModel = new AddBookViewModel()
+                {
+                    BookName = book.BookName,
+                    CategoryId = book.CategoryId,
+                    Description = book.Description,
+                    Image = book.Image,
+                    Price = book.Price
+                };
+                return View(addBookViewModel);
+            }
+
+            return NotFound();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> EditBook(int id, AddBookViewModel model)
+        {
+            ViewBag.Categories = new SelectList(_applicationDbContext.Categories, "Id", "CategoryName");
+
+            if (ModelState.IsValid)
+            {
+                var book = _applicationDbContext.Books.Find(id);
+
+                book.CategoryId = model.CategoryId;
+                book.BookName = model.BookName;
+                book.Image = model.Image;
+                book.Description = model.Description;
+                book.Price = model.Price;
+
+                _applicationDbContext.Update(book);
+                
+                await _applicationDbContext.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            
+            return View();
+        }
+
         [Authorize(Roles = "admin")]
         [HttpGet]
         public IActionResult AddCategory()
@@ -82,8 +144,47 @@ namespace BookStore.Controllers
                 await _applicationDbContext.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
-            
+
             return View(model);
+        }
+        
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public IActionResult EditCategory(int id)
+        {
+            var category = _applicationDbContext.Categories.Find(id);
+
+            if (category != null)
+            {
+                var addCategoryViewModel = new AddCategoryViewModel()
+                {
+                    CategoryName = category.CategoryName,
+                    Description = category.Description
+                };
+                return View(addCategoryViewModel);
+            }
+
+            return NotFound();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> EditCategory(int id, AddCategoryViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var category = _applicationDbContext.Categories.Find(id);
+
+                category.CategoryName = model.CategoryName;
+                category.Description = model.Description;
+
+                _applicationDbContext.Update(category);
+                
+                await _applicationDbContext.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            
+            return View();
         }
     }
 }

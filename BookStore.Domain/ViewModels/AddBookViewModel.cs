@@ -16,6 +16,6 @@ namespace BookStore.Domain.ViewModels
         [Required]
         public float Price { get; set; }
         [Required]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
     }
 }

@@ -1,0 +1,11 @@
+﻿@model System.Collections.Generic.List<BookStore.Domain.Entities.Book>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@foreach (var book in Model)
+{
+    <p>@book.Id @book.BookName</p> <a asp-controller="Book" asp-action="EditBook" asp-route-id="@book.Id">edit</a>
+}
