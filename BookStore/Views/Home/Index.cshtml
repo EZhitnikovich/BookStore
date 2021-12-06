@@ -1,8 +1,14 @@
-﻿@model dynamic
-
-@{
+﻿@{
     ViewBag.Title = "BookStore";
     Layout = "_Layout";
 }
 
 <h2>title</h2>
+<a asp-controller="Book" asp-action="Index">Book</a>
+<a asp-controller="Account" asp-action="Logout">Logout</a>
+<a asp-controller="Account" asp-action="Login">Login</a>
+<a asp-controller="Account" asp-action="Register">Register</a>
+@if (@User.Identity.IsAuthenticated)
+{
+    <a asp-controller="Account" asp-action="Index" asp-route-email="@User.Identity.Name">Account</a>
+}

@@ -1,0 +1,46 @@
+﻿@model BookStore.Domain.ViewModels.AddBookViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<form method="post" asp-controller="Book" asp-action="AddBook">
+    <div class="container">
+        <h1>AddBook</h1>
+        <p>Please fill in this form to add book.</p>
+        <hr>
+
+        <div>
+            <label asp-for="BookName"></label>
+            <input type="text" placeholder="Enter book name" name="BookName" id="BookName" asp-for="BookName">
+            <span asp-validation-for="BookName"></span>
+        </div>
+
+        <div>
+            <label asp-for="Description"></label>
+            <input type="text" placeholder="Enter Description" name="Description" id="Description" asp-for="Description">
+            <span asp-validation-for="Description"></span>
+        </div>
+
+        <div>
+            <label asp-for="Image"></label>
+            <input type="text" placeholder="Enter Image" name="Image" id="Image" asp-for="Image">
+            <span asp-validation-for="Image"></span>
+        </div>
+
+        <div>
+            <label asp-for="Price"></label>
+            <input type="text" placeholder="Enter Price" name="Price" id="Price" asp-for="Price">
+            <span asp-validation-for="Price"></span>
+        </div>
+
+        <div>
+            <label asp-for="CategoryId"></label>
+            <select asp-for="CategoryId" asp-items="ViewBag.Categories"></select>
+            <span asp-validation-for="CategoryId"></span>
+        </div>
+
+        <input type="submit" class="addbtn" value="Add category"/>
+    </div>
+</form>

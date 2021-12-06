@@ -25,4 +25,8 @@
         <Folder Include="wwwroot\lib" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Book\Index.cshtml" />
+    </ItemGroup>
+
 </Project>
