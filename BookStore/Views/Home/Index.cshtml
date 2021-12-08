@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<BookStore.Domain.Entities.Book>
+
+@{
     ViewBag.Title = "BookStore";
     Layout = "_Layout";
 }
@@ -11,4 +13,12 @@
 @if (@User.Identity.IsAuthenticated)
 {
     <a asp-controller="Account" asp-action="Index" asp-route-email="@User.Identity.Name">Account</a>
+}
+
+@foreach (var book in Model)
+{
+    <p>@book.BookName</p>
+    <p>@book.Price</p>
+    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@book.Id">Add to cart</a>
+    <hr/>
 }

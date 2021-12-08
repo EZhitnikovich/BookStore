@@ -26,7 +26,10 @@ namespace BookStore
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IBookRepository, BookRepository>();
-
+            
+            services.AddHttpContextAccessor();
+            services.AddTransient<ISessionCartService, SessionCartService>();
+            
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
@@ -36,6 +39,8 @@ namespace BookStore
             
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,6 +48,7 @@ namespace BookStore
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseRouting();
 

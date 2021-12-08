@@ -9,7 +9,7 @@ namespace BookStore.Persistence
         DbSet<Category> Categories { get; set; }
         DbSet<Book> Books { get; set; }
         DbSet<Order> Orders { get; set; }
+        DbSet<CartItem> CartItems { get; set; }
 
-        Task<int> SaveChangesAsync();
     }
 }

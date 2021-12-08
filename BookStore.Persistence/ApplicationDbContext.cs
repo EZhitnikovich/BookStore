@@ -15,10 +15,6 @@ namespace BookStore.Persistence
         public DbSet<Category> Categories { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Order> Orders { get; set; }
-
-        public async Task<int> SaveChangesAsync()
-        {
-            return await base.SaveChangesAsync();
-        }
+        public DbSet<CartItem> CartItems { get; set; }
     }
 }
