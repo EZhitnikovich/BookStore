@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BookStore.Domain.Auth;
 using BookStore.Domain.Entities;
 using BookStore.Domain.ViewModels;
 using BookStore.Persistence;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -12,11 +14,13 @@ namespace BookStore.Controllers
 {
     public class BookController : Controller
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BookController(ApplicationDbContext applicationDbContext)
+        public BookController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _applicationDbContext = applicationDbContext;
+            _context = context;
+            _userManager = userManager;
         }
 
         [Authorize(Roles = "admin")]
@@ -28,20 +32,20 @@ namespace BookStore.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult BookList()
         {
-            return View(_applicationDbContext.Books.ToList());
+            return View(_context.Books.ToList());
         }
         
         [Authorize(Roles = "admin")]
         public IActionResult CategoryList()
         {
-            return View(_applicationDbContext.Categories.ToList());
+            return View(_context.Categories.ToList());
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet]
         public IActionResult AddBook()
         {
-            ViewBag.Categories = new SelectList(_applicationDbContext.Categories, "Id", "CategoryName");
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
             return View();
         }
 
@@ -49,10 +53,10 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBook(AddBookViewModel model)
         {
-            ViewBag.Categories = new SelectList(_applicationDbContext.Categories, "Id", "CategoryName");
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
             if (ModelState.IsValid)
             {
-                if (_applicationDbContext.Books.Any(x => x.BookName == model.BookName))
+                if (_context.Books.Any(x => x.BookName == model.BookName))
                 {
                     ModelState.AddModelError("", "Книга уже есть в списке");
                     return View();
@@ -66,8 +70,8 @@ namespace BookStore.Controllers
                     Image = model.Image,
                     Price = model.Price
                 };
-                _applicationDbContext.Add(book);
-                await _applicationDbContext.SaveChangesAsync();
+                _context.Add(book);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
 
@@ -78,8 +82,8 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult EditBook(int id)
         {
-            ViewBag.Categories = new SelectList(_applicationDbContext.Categories, "Id", "CategoryName");
-            var book = _applicationDbContext.Books.Find(id);
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
+            var book = _context.Books.Find(id);
 
             if (book != null)
             {
@@ -101,11 +105,11 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> EditBook(int id, AddBookViewModel model)
         {
-            ViewBag.Categories = new SelectList(_applicationDbContext.Categories, "Id", "CategoryName");
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
 
             if (ModelState.IsValid)
             {
-                var book = _applicationDbContext.Books.Find(id);
+                var book = _context.Books.Find(id);
 
                 book.CategoryId = model.CategoryId;
                 book.BookName = model.BookName;
@@ -113,9 +117,9 @@ namespace BookStore.Controllers
                 book.Description = model.Description;
                 book.Price = model.Price;
 
-                _applicationDbContext.Update(book);
+                _context.Update(book);
                 
-                await _applicationDbContext.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
             
@@ -126,7 +130,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult DeleteBook(int id)
         {
-            var book = _applicationDbContext.Books.Find(id);
+            var book = _context.Books.Find(id);
 
             if (book != null)
             {
@@ -152,8 +156,8 @@ namespace BookStore.Controllers
             {
                 if (ready)
                 {
-                    _applicationDbContext.Remove(_applicationDbContext.Books.Find(id));
-                    await _applicationDbContext.SaveChangesAsync();
+                    _context.Remove(_context.Books.Find(id));
+                    await _context.SaveChangesAsync();
                 }
                 return RedirectToAction("BookList", "Book");
             }
@@ -178,8 +182,8 @@ namespace BookStore.Controllers
                     CategoryName = model.CategoryName,
                     Description = model.Description
                 };
-                _applicationDbContext.Add(category);
-                await _applicationDbContext.SaveChangesAsync();
+                _context.Add(category);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
 
@@ -190,7 +194,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult EditCategory(int id)
         {
-            var category = _applicationDbContext.Categories.Find(id);
+            var category = _context.Categories.Find(id);
 
             if (category != null)
             {
@@ -211,14 +215,14 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var category = _applicationDbContext.Categories.Find(id);
+                var category = _context.Categories.Find(id);
 
                 category.CategoryName = model.CategoryName;
                 category.Description = model.Description;
 
-                _applicationDbContext.Update(category);
+                _context.Update(category);
                 
-                await _applicationDbContext.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
             
@@ -229,7 +233,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult DeleteCategory(int id)
         {
-            var category = _applicationDbContext.Categories.Find(id);
+            var category = _context.Categories.Find(id);
 
             if (category != null)
             {
@@ -252,12 +256,46 @@ namespace BookStore.Controllers
             {
                 if (ready)
                 {
-                    _applicationDbContext.Remove(_applicationDbContext.Categories.Find(id));
-                    await _applicationDbContext.SaveChangesAsync();
+                    _context.Remove(_context.Categories.Find(id));
+                    await _context.SaveChangesAsync();
                 }
                 return RedirectToAction("CategoryList", "Book");
             }
             return View();
+        }
+
+        [Authorize]
+        public async Task<IActionResult> AddRating(int id, int value)
+        {
+            var book = _context.Books.Find(id);
+
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+
+            if (book != null && user != null)
+            {
+                var rating = _context.Marks.SingleOrDefault(x=> x.Book.Id == book.Id && x.User.Id == user.Id);
+
+                if (rating != null)
+                {
+                    rating.Mark = value;
+                }
+                else
+                {
+                    rating = new Rating()
+                    {
+                        User = user,
+                        Book = book,
+                        Mark = value
+                    };
+                    
+                    _context.Marks.Add(rating);
+                }
+                
+                await _context.SaveChangesAsync();
+            }
+            
+            //todo: make route
+            return RedirectToAction("Index", "Home");
         }
     }
 }

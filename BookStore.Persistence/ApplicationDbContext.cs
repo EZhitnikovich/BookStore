@@ -16,5 +16,6 @@ namespace BookStore.Persistence
         public DbSet<Book> Books { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Rating> Marks { get; set; }
     }
 }

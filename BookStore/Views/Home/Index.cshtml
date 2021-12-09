@@ -22,5 +22,10 @@
     <p>@book.BookName</p>
     <p>@book.Price</p>
     <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@book.Id">Add to cart</a>
+    <a asp-controller="Book" asp-action="AddRating" asp-route-id="@book.Id" asp-route-value="5">5</a>
+    <a asp-controller="Book" asp-action="AddRating" asp-route-id="@book.Id" asp-route-value="4">4</a>
+    <a asp-controller="Book" asp-action="AddRating" asp-route-id="@book.Id" asp-route-value="3">3</a>
+    <a asp-controller="Book" asp-action="AddRating" asp-route-id="@book.Id" asp-route-value="2">2</a>
+    <a asp-controller="Book" asp-action="AddRating" asp-route-id="@book.Id" asp-route-value="1">1</a>
     <hr/>
 }
