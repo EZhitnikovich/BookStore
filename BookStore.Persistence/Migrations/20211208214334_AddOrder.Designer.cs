@@ -4,14 +4,16 @@ using BookStore.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookStore.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211208214334_AddOrder")]
+    partial class AddOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,12 +190,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -376,15 +373,6 @@ namespace BookStore.Persistence.Migrations
                     b.Navigation("Book");
                 });
 
-            modelBuilder.Entity("BookStore.Domain.Entities.Order", b =>
-                {
-                    b.HasOne("BookStore.Domain.Auth.ApplicationUser", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("BookStore.Domain.Entities.Rating", b =>
                 {
                     b.HasOne("BookStore.Domain.Auth.ApplicationUser", "User")
@@ -454,8 +442,6 @@ namespace BookStore.Persistence.Migrations
             modelBuilder.Entity("BookStore.Domain.Auth.ApplicationUser", b =>
                 {
                     b.Navigation("MarkedBooks");
-
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("BookStore.Domain.Entities.Book", b =>

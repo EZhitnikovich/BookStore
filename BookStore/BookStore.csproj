@@ -22,11 +22,19 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="wwwroot\fonts" />
+        <Folder Include="wwwroot\images" />
+        <Folder Include="wwwroot\js" />
         <Folder Include="wwwroot\lib" />
     </ItemGroup>
 
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Views\Book\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\shortcode\default.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\shortcode\footer.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\shortcode\header.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\shortcode\shortcodes.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\shortcode\slider.css" />
     </ItemGroup>
 
 </Project>

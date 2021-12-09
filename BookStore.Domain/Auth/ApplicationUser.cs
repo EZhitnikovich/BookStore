@@ -10,5 +10,6 @@ namespace BookStore.Domain.Auth
         public string LastName { get; set; }
 
         public List<Rating> MarkedBooks { get; set; }
+        public List<Order> Orders { get; set; }
     }
 }

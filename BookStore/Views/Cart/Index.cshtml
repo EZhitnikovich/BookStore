@@ -14,3 +14,5 @@
 }
 
 <p>Total price @Math.Round(@Model.Sum(x=>x.Book.Price * x.Amount),2)</p>
+
+<a asp-controller="Order" asp-action="MakeOrder">Make order</a>

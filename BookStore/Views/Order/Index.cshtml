@@ -1,0 +1,21 @@
+﻿@model List<BookStore.Domain.Entities.Order>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@foreach (var item in Model)
+{
+    <p>email @item.Email</p>
+    <p>user name @item.User.FirstName</p>
+    <p>phone number @item.PhoneNumber</p>
+    <hr/>
+    @foreach (var product in item.CartItems)
+    {
+        <p>bookname @product.Book.BookName</p>
+        <p>amount @product.Amount</p>
+    }
+    <hr/>
+}
+

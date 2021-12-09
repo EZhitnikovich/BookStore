@@ -1,0 +1,35 @@
+﻿@model BookStore.Domain.ViewModels.OrderViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<form method="post" asp-controller="Order" asp-action="MakeOrder">
+    <div class="container">
+        <h1>Make order</h1>
+        <p>Please fill in this form to make order.</p>
+        <hr>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+
+        <div>
+            <label asp-for="PhoneNumber"></label>
+            <input type="text" placeholder="Enter Phone Number" name="PhoneNumber" id="PhoneNumber" asp-for="PhoneNumber">
+            <span asp-validation-for="PhoneNumber"></span>
+        </div>
+
+        <div>
+            <label asp-for="Email"></label>
+            <input type="text" placeholder="Enter Email" name="Email" id="Email" asp-for="Email">
+            <span asp-validation-for="Email"></span>
+        </div>
+
+        <div>
+            <label asp-for="Information"></label>
+            <input type="text" placeholder="Enter Information" name="Information" id="Information" asp-for="Information">
+            <span asp-validation-for="Information"></span>
+        </div>
+
+        <input type="submit" class="orderbtn" value="Make order"/>
+    </div>
+</form>

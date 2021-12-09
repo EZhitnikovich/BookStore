@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using BookStore.Domain.Auth;
 
 namespace BookStore.Domain.Entities
 {
     public class Order : BaseEntity
     {
-        [DataType(DataType.EmailAddress)] public string Email { get; set; }
-
+        public string Email { get; set; }
         public string Information { get; set; }
+        public string PhoneNumber { get; set; }
 
-        [DataType(DataType.PhoneNumber)] public string PhoneNumber { get; set; }
+        public List<CartItem> CartItems { get; set; }
+        public DateTime OrderDate { get; set; }
 
-        public List<OrderDetail> OrderDetails { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

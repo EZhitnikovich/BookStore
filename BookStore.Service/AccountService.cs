@@ -33,7 +33,13 @@ namespace BookStore.Service
             };
             
             var result = await _userManager.CreateAsync(user, request.Password);
-            return await _userManager.AddToRoleAsync(user, "user");
+            
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "user");
+            }
+
+            return result;
         }
 
         public async Task<SignInResult> PasswordLoginAsync(AuthenticationRequest request)
