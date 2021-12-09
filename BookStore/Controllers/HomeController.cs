@@ -6,6 +6,7 @@ using BookStore.Domain.Entities;
 using BookStore.Domain.ViewModels;
 using BookStore.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Controllers
@@ -21,14 +22,22 @@ namespace BookStore.Controllers
         
         public IActionResult Index()
         {
+            var categories = _context.Categories.ToList();
+            categories.Add(new Category(){CategoryName = "Все категории", Id = 0});
+            ViewBag.Categories = new SelectList(categories, "Id", "CategoryName");
+            
             var books = _context.Books.Include(x => x.Category).Include(m => m.Marks).ToList();
 
             return View(books);
         }
         
         [HttpPost]
-        public IActionResult Index(string bookName, float startRating, float endRating, DateTime startDate, DateTime endDate)
+        public IActionResult Index(string bookName, float startRating, float endRating, DateTime startDate, DateTime endDate, int categoryId)
         {
+            var categories = _context.Categories.ToList();
+            categories.Add(new Category(){CategoryName = "Все категории", Id = 0});
+            ViewBag.Categories = new SelectList(categories, "Id", "CategoryName");
+            
             bookName = string.IsNullOrEmpty(bookName) ? string.Empty : bookName;
             endDate = endDate == DateTime.MinValue ? DateTime.MaxValue : endDate;
             
@@ -43,7 +52,12 @@ namespace BookStore.Controllers
                     x.Marks.Average(k => k.Mark) <= endRating).ToList();
             }
 
-            books = books.Where(e => e.PublicationDate >= startDate && e.PublicationDate <= endDate).ToList();
+            books = books.Where(x => x.PublicationDate >= startDate && x.PublicationDate <= endDate).ToList();
+
+            if (categoryId != 0)
+            {
+                books = books.Where(x => x.CategoryId == categoryId).ToList();
+            }
 
             return View(books);
         }

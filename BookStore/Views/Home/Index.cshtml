@@ -56,6 +56,10 @@
             <input type="date" placeholder="Enter EndDate" name="endDate" id="EndDate">
         </div>
 
+        <div>
+            <select name="categoryId" asp-items="ViewBag.Categories"></select>
+        </div>
+
         <hr>
 
         <input type="submit" class="addbtn" value="Add category"/>
