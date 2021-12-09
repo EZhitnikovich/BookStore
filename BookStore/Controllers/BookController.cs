@@ -294,8 +294,7 @@ namespace BookStore.Controllers
                 await _context.SaveChangesAsync();
             }
             
-            //todo: make route
-            return RedirectToAction("Index", "Home");
+            return NoContent();
         }
     }
 }
