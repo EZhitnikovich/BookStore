@@ -58,7 +58,7 @@ namespace BookStore.Controllers
             {
                 if (_context.Books.Any(x => x.BookName == model.BookName))
                 {
-                    ModelState.AddModelError("", "Книга уже есть в списке");
+                    ModelState.AddModelError("", "Данная книга уже существует");
                     return View();
                 }
 
@@ -68,7 +68,8 @@ namespace BookStore.Controllers
                     CategoryId = model.CategoryId,
                     Description = model.Description,
                     Image = model.Image,
-                    Price = model.Price
+                    Price = model.Price,
+                    PublicationDate = model.PublicationDate
                 };
                 _context.Add(book);
                 await _context.SaveChangesAsync();
@@ -93,7 +94,8 @@ namespace BookStore.Controllers
                     CategoryId = book.CategoryId,
                     Description = book.Description,
                     Image = book.Image,
-                    Price = book.Price
+                    Price = book.Price,
+                    PublicationDate = book.PublicationDate
                 };
                 return View(addBookViewModel);
             }
@@ -116,6 +118,7 @@ namespace BookStore.Controllers
                 book.Image = model.Image;
                 book.Description = model.Description;
                 book.Price = model.Price;
+                book.PublicationDate = model.PublicationDate;
 
                 _context.Update(book);
                 
@@ -140,7 +143,8 @@ namespace BookStore.Controllers
                     CategoryId = book.CategoryId,
                     Description = book.Description,
                     Image = book.Image,
-                    Price = book.Price
+                    Price = book.Price,
+                    PublicationDate = book.PublicationDate
                 };
                 return View(addBookViewModel);
             }
@@ -177,17 +181,24 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (_context.Categories.Any(x => x.CategoryName == model.CategoryName))
+                {
+                    ModelState.AddModelError("", "Название категории уже существует");
+                    return View();
+                }
+                
                 var category = new Category()
                 {
                     CategoryName = model.CategoryName,
                     Description = model.Description
                 };
+                
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
 
-            return View(model);
+            return View();
         }
         
         [Authorize(Roles = "admin")]

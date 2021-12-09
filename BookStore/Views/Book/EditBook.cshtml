@@ -25,6 +25,12 @@
         </div>
 
         <div>
+            <label asp-for="PublicationDate"></label>
+            <input type="date" placeholder="Enter PublicationDate" name="PublicationDate" id="PublicationDate" asp-for="PublicationDate">
+            <span asp-validation-for="PublicationDate"></span>
+        </div>
+
+        <div>
             <label asp-for="Image"></label>
             <input type="text" placeholder="Enter Image" name="Image" id="Image" asp-for="Image">
             <span asp-validation-for="Image"></span>

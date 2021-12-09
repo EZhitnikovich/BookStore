@@ -38,8 +38,16 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountService.CreateUserAsync(model);
+                var user = _accountService.FindByEmail(model.Email);
+
+                if (user != null)
+                {
+                    ModelState.AddModelError("", "Аккаунт с такой почтной уже существует");
+                    return View(model);
+                }
                 
+                var result = await _accountService.CreateUserAsync(model);
+
                 if (result.Succeeded) return RedirectToAction("Index", "Home");
             }
 
@@ -70,7 +78,7 @@ namespace BookStore.Controllers
                 else if (result.IsLockedOut)
                     ModelState.AddModelError("", "Account blocked. Try after some time.");
                 else
-                    ModelState.AddModelError("", "Invalid credentials");
+                    ModelState.AddModelError("", "Неверная почта или пароль");
             }
 
             return View(model);

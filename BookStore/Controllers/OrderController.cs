@@ -61,7 +61,7 @@ namespace BookStore.Controllers
                     var order = new Order()
                     {
                         CartItems = cartItems,
-                        Email = model.Email,
+                        Address = model.Address,
                         Information = model.Information,
                         OrderDate = DateTime.Now,
                         PhoneNumber = model.PhoneNumber,
@@ -75,6 +75,37 @@ namespace BookStore.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            return View();
+        }
+        
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public IActionResult DeleteOrder(int id)
+        {
+            var order = _context.Orders.Include(u => u.User).Include(c => c.CartItems).ThenInclude(c => c.Book)
+                .ToList().SingleOrDefault(x => x.Id == id);
+
+            if (order != null)
+            {
+                return View(order);
+            }
+            
+            return NotFound();
+        }
+        
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteOrder(int id, bool ready)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ready)
+                {
+                    _context.Remove(_context.Orders.Find(id));
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction("Index", "Order");
+            }
             return View();
         }
     }
