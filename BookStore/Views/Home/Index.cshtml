@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BookStore.Domain.Entities.Book>
+﻿@model List<BookStore.Domain.Entities.Book>
 
 @{
     ViewBag.Title = "BookStore";
@@ -29,3 +29,35 @@
     <a asp-controller="Book" asp-action="AddRating" asp-route-id="@book.Id" asp-route-value="1">1</a>
     <hr/>
 }
+
+<form method="post" asp-controller="Home" asp-action="Index">
+    <div class="container">
+        <h1>Search</h1>
+        <p>Please fill in this form to search.</p>
+        <hr>
+
+        <div>
+            <input type="text" placeholder="Enter BookName" name="bookName">
+        </div>
+
+        <div>
+            <input type="number" placeholder="Enter StartRating" name="startRating" id="StartRating">
+        </div>
+
+        <div>
+            <input type="number" placeholder="Enter EndRating" name="endRating" id="EndRating">
+        </div>
+
+        <div>
+            <input type="date" placeholder="Enter StartDate" name="startDate" id="StartDate">
+        </div>
+
+        <div>
+            <input type="date" placeholder="Enter EndDate" name="endDate" id="EndDate">
+        </div>
+
+        <hr>
+
+        <input type="submit" class="addbtn" value="Add category"/>
+    </div>
+</form>
