@@ -1,20 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
-using BookStore.Domain.Auth;
-using BookStore.Domain.Entities;
-using BookStore.Persistence;
+﻿using BookStore.Persistence;
 using BookStore.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 
 namespace BookStore.Controllers
 {
     [Authorize]
-    public class CartController: Controller
+    public class CartController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly ISessionCartService _cartService;
+        private readonly ApplicationDbContext _context;
 
         public CartController(ApplicationDbContext context, ISessionCartService cartService)
         {
@@ -22,34 +17,31 @@ namespace BookStore.Controllers
             _cartService = cartService;
         }
 
-        public ViewResult Index()
-        {
-            var items = _cartService.GetCartItems();
-            return View(items);
-        }
-
-        public RedirectToActionResult AddToCart(int id)
+        public IActionResult AddToCart(int id)
         {
             var book = _context.Books.Find(id);
 
-            if (book != null)
-            {
-                _cartService.AddToCart(book);
-            }
+            if (book != null) _cartService.ChangeAmountInCart(book, 1);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Account");
         }
 
-        public RedirectToActionResult RemoveFromCart(int id)
+        public IActionResult ChangeAmountInCart(int id, int amount)
         {
             var book = _context.Books.Find(id);
 
-            if (book != null)
-            {
-                _cartService.RemoveFromCart(book);
-            }
+            if (book != null) _cartService.ChangeAmountInCart(book, amount);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Account");
+        }
+
+        public IActionResult RemoveFromCart(int id)
+        {
+            var book = _context.Books.Find(id);
+
+            if (book != null) _cartService.RemoveFromCart(book);
+
+            return RedirectToAction("Index", "Account");
         }
     }
 }

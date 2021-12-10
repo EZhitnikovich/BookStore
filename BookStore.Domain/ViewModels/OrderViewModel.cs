@@ -11,7 +11,7 @@ namespace BookStore.Domain.ViewModels
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Адрес должен содержать от 2 до 50 символов")]
         public string Address { get; set; }
         
-        [StringLength(250, ErrorMessage = "")]
+        [StringLength(250, ErrorMessage = "Слишком длинное сообщение")]
         public string Information { get; set; }
         
         [Required]

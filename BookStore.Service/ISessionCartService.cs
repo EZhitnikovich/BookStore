@@ -7,10 +7,10 @@ namespace BookStore.Service
     public interface ISessionCartService
     {
         public string GetCartId();
-        public void AddToCart(Book book);
         public int RemoveFromCart(Book book);
         public List<CartItem> GetCartItems();
         public void ClearCart();
         public float GetSopCartTotal();
+        void ChangeAmountInCart(Book book, int amount);
     }
 }

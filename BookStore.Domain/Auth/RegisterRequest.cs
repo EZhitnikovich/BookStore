@@ -23,7 +23,7 @@ namespace BookStore.Domain.Auth
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        [StringLength(20, MinimumLength = 8, ErrorMessage = "")]
+        [StringLength(20, MinimumLength = 8, ErrorMessage = "Пароль должен содержать от 8 до 20 символов")]
         public string Password { get; set; }
 
         [Required]

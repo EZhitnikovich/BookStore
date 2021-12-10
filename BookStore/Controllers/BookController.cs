@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Controllers
 {
@@ -22,23 +23,17 @@ namespace BookStore.Controllers
             _context = context;
             _userManager = userManager;
         }
-
-        [Authorize(Roles = "admin")]
-        public IActionResult Index()
-        {
-            return View();
-        }
         
         [Authorize(Roles = "admin")]
         public IActionResult BookList()
         {
-            return View(_context.Books.ToList());
+            return View(_context.Books.Include(x=>x.Category).ToList());
         }
         
         [Authorize(Roles = "admin")]
         public IActionResult CategoryList()
         {
-            return View(_context.Categories.ToList());
+            return View(_context.Categories.Include(x=>x.Books).ToList());
         }
 
         [Authorize(Roles = "admin")]
@@ -133,6 +128,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public IActionResult DeleteBook(int id)
         {
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
             var book = _context.Books.Find(id);
 
             if (book != null)
@@ -156,11 +152,25 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteBook(int id, bool ready)
         {
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
+
+            var a = _context.Books.Find(id).Category;
+
+            ViewBag.CategoryName = a.CategoryName;
+            
             if (ModelState.IsValid)
             {
                 if (ready)
                 {
-                    _context.Remove(_context.Books.Find(id));
+                    var book = _context.Books.Include(m=>m.Marks).SingleOrDefault(x=>x.Id == id);
+
+                    if (book != null && book.Marks.Any())
+                    {
+                        _context.RemoveRange(book.Marks);
+                        _context.CartItems.RemoveRange(_context.CartItems.Include(b=>b.Book).Where(x=>x.Book.Id == id));
+                        _context.Books.Remove(book);
+                    }
+                    
                     await _context.SaveChangesAsync();
                 }
                 return RedirectToAction("BookList", "Book");
@@ -278,6 +288,9 @@ namespace BookStore.Controllers
         [Authorize]
         public async Task<IActionResult> AddRating(int id, int value)
         {
+            value = value <= 0 ? 1 : value;
+            value = value > 5 ? 5 : value;
+            
             var book = _context.Books.Find(id);
 
             var user = await _userManager.FindByEmailAsync(User.Identity.Name);
@@ -304,8 +317,8 @@ namespace BookStore.Controllers
                 
                 await _context.SaveChangesAsync();
             }
-            
-            return NoContent();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -1,21 +1,34 @@
 ﻿@model List<BookStore.Domain.Entities.Order>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Заказы";
     Layout = "_Layout";
 }
 
-@foreach (var item in Model)
-{
-    <p>Address @item.Address</p>
-    <p>user name @item.User.FirstName</p>
-    <p>phone number @item.PhoneNumber</p>
-    <hr/>
-    @foreach (var product in item.CartItems)
-    {
-        <p>bookname @product.Book.BookName</p>
-        <p>amount @product.Amount</p>
-    }
-    <hr/>
-}
-
+<section id="form">
+    <!--form-->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                
+                @foreach (var item in Model)
+                {
+                    <t2>Информация о пользователе:</t2>
+                    <p>Адрес: @item.Address</p>
+                    <p>Имя пользователя: @item.User.FirstName</p>
+                    <p>Номер телефона: @item.PhoneNumber</p>
+                    <t2>Список товаров:</t2>
+                               @foreach (var prod in item.CartItems)
+                               {
+                                   <p>Книга: @prod.Book.BookName, Категория: @prod.Book.Category.CategoryName, Количество: @prod.Amount</p>
+                               }
+                    <p>Дополнительная информация: @item.Information</p>
+                    <p>Конечная цена: @item.CartItems.Sum(c=>c.Amount * c.Book.Price)</p>
+                    <hr/>
+                    <a asp-controller="Order" asp-action="DeleteOrder" asp-route-id="@item.Id">Закрыть заказ</a>
+                    <hr/>
+                }
+            </div>
+        </div>
+    </div>
+</section>

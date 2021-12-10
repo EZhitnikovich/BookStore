@@ -22,9 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="wwwroot\fonts" />
         <Folder Include="wwwroot\images" />
-        <Folder Include="wwwroot\js" />
         <Folder Include="wwwroot\lib" />
     </ItemGroup>
 
@@ -35,6 +33,7 @@
       <_ContentIncludedByDefault Remove="wwwroot\css\shortcode\header.css" />
       <_ContentIncludedByDefault Remove="wwwroot\css\shortcode\shortcodes.css" />
       <_ContentIncludedByDefault Remove="wwwroot\css\shortcode\slider.css" />
+      <_ContentIncludedByDefault Remove="Views\Cart\Index.cshtml" />
     </ItemGroup>
 
 </Project>

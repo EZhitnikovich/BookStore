@@ -1,24 +1,39 @@
 ﻿@model BookStore.Domain.ViewModels.AddBookViewModel
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Удаление книги";
     Layout = "_Layout";
 }
 
-<form method="post" asp-controller="Book" asp-action="AddCategory">
+<section id="form">
+    <!--form-->
     <div class="container">
-        <h2>@Model.BookName</h2>
-        <h2>@Model.Description</h2>
-        <h2>@Model.Image</h2>
-        <h2>@Model.Price</h2>
-        <h2>@Model.PublicationDate</h2>
-        <h2>@Model.CategoryId</h2>
-        
-        <p>Удалить?</p>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="login-form">
+                    <!--login form-->
+                    <h2>Удалить книгу</h2>
+                    <form method="post" asp-controller="Book" asp-action="AddBook">
+                        <div class="validation" asp-validation-summary="ModelOnly"></div>
+                        <input type="text" placeholder="Enter book name" name="BookName" asp-for="BookName">
 
-        <hr>
+                        <textarea rows="5" maxlength="251" type="text" placeholder="Enter Description" name="Description" asp-for="Description"></textarea>
 
-        <input type="submit" asp-action="DeleteBook" asp-controller="Book" asp-route-ready="@true" value="Да">
-        <input type="submit" asp-action="DeleteBook" asp-controller="Book" asp-route-ready="@false" value="нет">
+                        <input type="date" placeholder="Enter PublicationDate" name="PublicationDate" asp-for="PublicationDate">
+
+                        <input type="text" placeholder="Enter Image" name="Image" asp-for="Image">
+
+                        <input placeholder="Enter Price" name="Price" asp-for="Price">
+
+                        <select asp-for="CategoryId" asp-items="ViewBag.Categories"></select>
+
+                        <lable>Удалить?</lable>
+                        
+                        <input type="submit" asp-action="DeleteBook" asp-controller="Book" asp-route-ready="@true" value="Да">
+                        <input type="submit" asp-action="DeleteBook" asp-controller="Book" asp-route-ready="@false" value="нет">
+                    </form>
+                </div><!--/login form-->
+            </div>
+        </div>
     </div>
-</form>
+</section>

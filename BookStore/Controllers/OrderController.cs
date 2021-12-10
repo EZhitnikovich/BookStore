@@ -30,7 +30,7 @@ namespace BookStore.Controllers
         public IActionResult Index()
         {
             var orders = _context.Orders.Include(u=>u.User).
-                Include(c => c.CartItems).ThenInclude(c => c.Book).ToList();
+                Include(c => c.CartItems).ThenInclude(c => c.Book).ThenInclude(p=>p.Category).ToList();
             return View(orders);
         }
         
@@ -79,34 +79,22 @@ namespace BookStore.Controllers
         }
         
         [Authorize(Roles = "admin")]
-        [HttpGet]
-        public IActionResult DeleteOrder(int id)
-        {
-            var order = _context.Orders.Include(u => u.User).Include(c => c.CartItems).ThenInclude(c => c.Book)
-                .ToList().SingleOrDefault(x => x.Id == id);
-
-            if (order != null)
-            {
-                return View(order);
-            }
-            
-            return NotFound();
-        }
-        
-        [Authorize(Roles = "admin")]
-        [HttpPost]
-        public async Task<IActionResult> DeleteOrder(int id, bool ready)
+        public async Task<IActionResult> DeleteOrder(int id)
         {
             if (ModelState.IsValid)
             {
-                if (ready)
+                var order = _context.Orders.Include(x=>x.CartItems).FirstOrDefault(c=>c.Id == id);
+
+                if (order != null)
                 {
-                    _context.Remove(_context.Orders.Find(id));
-                    await _context.SaveChangesAsync();
+                    _context.RemoveRange(order.CartItems);
+                    _context.Remove(order);
                 }
+                
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Order");
             }
-            return View();
+            return NoContent();
         }
     }
 }

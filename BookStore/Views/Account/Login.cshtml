@@ -1,36 +1,32 @@
 ﻿@model BookStore.Domain.Auth.AuthenticationRequest
 
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Вход";
     Layout = "_Layout";
 }
 
-<form method="post" asp-controller="Account" asp-action="Login">
+<section id="form">
+    <!--form-->
     <div class="container">
-        <h1>Register</h1>
-        <p>Please fill in this form to create an account.</p>
-        <hr>
-
-        <div>
-            <label asp-for="Email"></label>
-            <input type="text" placeholder="Enter Email" name="Email" id="email" asp-for="Email">
-            <span asp-validation-for="Email"></span>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="login-form">
+                    <!--login form-->
+                    <h2>Войти в аккаунт</h2>
+                    <form method="post" asp-controller="Account" asp-action="Login" style="margin-bottom: 200px">
+                        <div class="validation" asp-validation-summary="ModelOnly"></div>
+                        <input type="text" placeholder="Enter Email" name="Email" id="email" asp-for="Email">
+                        <span asp-validation-for="Email"></span>
+                        <input type="password" placeholder="Enter Password" name="Password" id="psw" asp-for="Password">
+                        <span asp-validation-for="Password"></span>
+                        <span>
+                            <input type="checkbox" class="checkbox" asp-for="RememberMe">
+                            Запомнить меня
+                        </span>
+                        <button type="submit" class="btn btn-default">Войти</button>
+                    </form>
+                </div><!--/login form-->
+            </div>
         </div>
-
-        <div>
-            <label asp-for="Password"></label>
-            <input type="password" placeholder="Enter Password" name="Password" id="psw" asp-for="Password">
-            <span asp-validation-for="Password"></span>
-        </div>
-
-        <div>
-            <label asp-for="RememberMe"></label>
-            <input type="checkbox" name="RememberMe" asp-for="RememberMe">
-            <span asp-validation-for="RememberMe"></span>
-        </div>
-
-        <hr>
-
-        <input type="submit" class="loginbtn" value="Login"/>
     </div>
-</form>
+</section>

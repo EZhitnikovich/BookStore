@@ -5,9 +5,40 @@
     Layout = "_Layout";
 }
 
-@foreach (var category in Model)
-{
-    <p>@category.Id @category.CategoryName</p>
-    <a asp-controller="Book" asp-action="EditCategory" asp-route-id="@category.Id">edit</a>
-    <a asp-controller="Book" asp-action="DeleteCategory" asp-route-id="@category.Id">delete</a>
-}
+<section id="form">
+    <!--form-->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="mainmenu pull-left">
+                    <ul class="nav navbar-nav collapse navbar-collapse">
+                        <li>
+                            <a asp-controller="Book" asp-action="AddCategory" class="active">Добавить категорию</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                @foreach (var category in Model)
+                {
+                    <div class="container">
+                        <div class="row">
+                            <p class="pull-left">Id: @category.Id, Название: @category.CategoryName, Количество книг: @category.Books.Count</p>
+                            <p class="pull-right">
+                                <span>
+                                    <a asp-controller="Book" asp-action="EditCategory" asp-route-id="@category.Id">edit</a>
+                                </span>
+                                <span>
+                                    <a asp-controller="Book" asp-action="DeleteCategory" asp-route-id="@category.Id">delete</a>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <hr/>
+                }
+            </div>
+        </div>
+    </div>
+</section>

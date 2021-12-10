@@ -1,0 +1,26 @@
+﻿@model BookStore.Persistence.ApplicationDbContext
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="mainmenu pull-left">
+                <ul class="nav navbar-nav collapse navbar-collapse">
+                    <li>
+                        <a asp-controller="Book" asp-action="BookList" class="active">Книги</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Book" asp-action="CategoryList" class="active">Категории</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Order" asp-action="Index" class="active">Заказы</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

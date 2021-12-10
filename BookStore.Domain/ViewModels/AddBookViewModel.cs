@@ -13,7 +13,7 @@ namespace BookStore.Domain.ViewModels
         public string BookName { get; set; }
         
         [Required]
-        [StringLength(50, MinimumLength = 25, ErrorMessage = "Описание книги должно содержать от 25 до 250 символов")]
+        [StringLength(250, MinimumLength = 25, ErrorMessage = "Описание книги должно содержать от 25 до 250 символов")]
         public string Description { get; set; }
         
         [Required]

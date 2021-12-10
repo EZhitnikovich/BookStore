@@ -1,10 +1,69 @@
-﻿@model BookStore.Domain.Auth.ApplicationUser
+﻿@using BookStore.Domain.Auth
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Личный кабинет";
     Layout = "_Layout";
 }
+@{
+    var user = ViewBag.User as ApplicationUser;
+    var cart = ViewBag.Cart as List<BookStore.Domain.Entities.CartItem>;
+}
 
-<p>@Model.UserName</p>
-<p>@Model.FirstName</p>
-<p>@Model.LastName</p>
+<section id="cart_items">
+    <div class="container">
+        <div class="table-responsive cart_info">
+            <p>Почта: @user?.Email, Имя: @user?.FirstName, Фамилия: @user?.LastName</p>
+            <table class="table table-condensed">
+                <thead>
+                <tr class="cart_menu">
+                    <td class="image">Item</td>
+                    <td class="description"></td>
+                    <td class="price">Price</td>
+                    <td class="quantity">Quantity</td>
+                    <td class="total">Total</td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in cart)
+                {
+                    <tr>
+                        <td class="cart_product">
+                            <img src="@item.Book.Image" alt="" style="width: 110px; height: 110px">
+                        </td>
+                        <td class="cart_description">
+                            <h4>
+                                <a href="">@item.Book.BookName</a>
+                            </h4>
+                            <p>WID: @item.Book.Id</p>
+                        </td>
+
+                        <td class="cart_price">
+                            <p>$@item.Book.Price</p>
+                        </td>
+                        <td class="cart_quantity">
+                            <div class="cart_quantity_button">
+                                <a class="cart_quantity_up" asp-controller="Cart" asp-action="ChangeAmountInCart" asp-route-id="@item.Book.Id" asp-route-amount="1"> + </a>
+                                <input class="cart_quantity_input" type="text" value="@item.Amount" autocomplete="off" size="2">
+                                <a class="cart_quantity_down" asp-controller="Cart" asp-action="ChangeAmountInCart" asp-route-id="@item.Book.Id" asp-route-amount="-1"> - </a>
+                            </div>
+                        </td>
+                        <td class="cart_total">
+                            <p class="cart_total_price">$@Math.Round(item.Amount * item.Book.Price, 2)</p>
+                        </td>
+                        <td class="cart_delete">
+                            <a class="cart_quantity_delete" asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@item.Book.Id">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            @if (cart.Any())
+            {
+                <span><a type="submit" class="btn btn-default" asp-action="MakeOrder" asp-controller="Order">Заказать</a></span>
+            }
+        </div>
+    </div>
+</section>

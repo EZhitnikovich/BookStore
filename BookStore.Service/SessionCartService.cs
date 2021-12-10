@@ -34,10 +34,10 @@ namespace BookStore.Service
             return cartId;
         }
 
-        public void AddToCart(Book book)
+        public void ChangeAmountInCart(Book book, int amount)
         {
             var cartId = GetCartId();
-            var shopCartItem = _context.CartItems.SingleOrDefault(
+            var shopCartItem = _context.CartItems.FirstOrDefault(
                 s => s.Book.Id == book.Id && s.ShopCartId == cartId);
 
             if (shopCartItem == null)
@@ -46,15 +46,17 @@ namespace BookStore.Service
                 {
                     ShopCartId = cartId,
                     Book = book,
-                    Amount = 1
+                    Amount = amount
                 };
 
                 _context.CartItems.Add(shopCartItem);
             }
             else
             {
-                shopCartItem.Amount++;
+                shopCartItem.Amount += amount;
             }
+
+            if (shopCartItem.Amount == 0) _context.Remove(shopCartItem);
 
             _context.SaveChanges();
         }
@@ -62,22 +64,14 @@ namespace BookStore.Service
         public int RemoveFromCart(Book book)
         {
             var cartId = GetCartId();
-            var shopCartItem = _context.CartItems.SingleOrDefault(
+            var shopCartItem = _context.CartItems.FirstOrDefault(
                 s => s.Book.Id == book.Id && s.ShopCartId == cartId);
 
             var localAmount = 0;
 
             if (shopCartItem != null)
             {
-                if (shopCartItem.Amount > 1)
-                {
-                    shopCartItem.Amount--;
-                    localAmount = shopCartItem.Amount;
-                }
-                else
-                {
-                    _context.CartItems.Remove(shopCartItem);
-                }
+                _context.CartItems.Remove(shopCartItem);
             }
 
             _context.SaveChanges();

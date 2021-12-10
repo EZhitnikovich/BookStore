@@ -5,26 +5,26 @@
     Layout = "_Layout";
 }
 
-<form method="post" asp-controller="Book" asp-action="AddCategory">
+<section id="form">
+    <!--form-->
     <div class="container">
-        <h1>AddBook</h1>
-        <p>Please fill in this form to add category.</p>
-        <hr>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="login-form">
+                    <!--login form-->
+                    <h2>Добавить категорию</h2>
+                    <form method="post" asp-controller="Book" asp-action="AddCategory">
+                        <div class="validation" asp-validation-summary="ModelOnly"></div>
+                        <input type="text" placeholder="Введите название категории" name="CategoryName" asp-for="CategoryName">
+                        <span asp-validation-for="CategoryName"></span>
 
-        <div>
-            <label asp-for="CategoryName"></label>
-            <input type="text" placeholder="Enter category name" name="CategoryName" id="CategoryName" asp-for="CategoryName">
-            <span asp-validation-for="CategoryName"></span>
+                        <textarea rows="5" maxlength="251" type="text" placeholder="Введите описание" name="Description" asp-for="Description"></textarea>
+                        <span asp-validation-for="Description"></span>
+
+                        <button type="submit" class="btn btn-default">Добавить</button>
+                    </form>
+                </div><!--/login form-->
+            </div>
         </div>
-
-        <div>
-            <label asp-for="Description"></label>
-            <input type="text" placeholder="Enter Description" name="Description" id="Description" asp-for="Description">
-            <span asp-validation-for="Description"></span>
-        </div>
-
-        <hr>
-
-        <input type="submit" class="addbtn" value="Add category"/>
     </div>
-</form>
+</section>

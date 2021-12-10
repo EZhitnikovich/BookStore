@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using BookStore.Domain.Auth;
 using BookStore.Repositories.Interfaces;
+using BookStore.Service;
 using BookStore.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,21 +10,29 @@ namespace BookStore.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
+        private readonly ISessionCartService _cartService;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, ISessionCartService cartService)
         {
             _accountService = accountService;
+            _cartService = cartService;
         }
 
-        public async Task<IActionResult> Index(string email)
+        public async Task<IActionResult> Index()
         {
-            var user = await _accountService.FindByEmail(email);
-
-            if (user != null)
+            if (User.Identity.IsAuthenticated)
             {
-                return View(user);
+                var user = await _accountService.FindByEmail(User.Identity.Name);
+
+                if (user != null)
+                {
+                    ViewBag.User = user;
+                    ViewBag.Cart = _cartService.GetCartItems();
+
+                    return View();
+                }
             }
-            
+
             return NotFound();
         }
         
@@ -38,7 +47,7 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _accountService.FindByEmail(model.Email);
+                var user = await _accountService.FindByEmail(model.Email);
 
                 if (user != null)
                 {
@@ -51,7 +60,7 @@ namespace BookStore.Controllers
                 if (result.Succeeded) return RedirectToAction("Index", "Home");
             }
 
-            return View(model);
+            return View();
         }
 
         [HttpGet]

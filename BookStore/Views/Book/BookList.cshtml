@@ -1,13 +1,46 @@
 ﻿@model System.Collections.Generic.List<BookStore.Domain.Entities.Book>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Список книг";
     Layout = "_Layout";
 }
 
-@foreach (var book in Model)
-{
-    <p>@book.Id @book.BookName</p>
-    <a asp-controller="Book" asp-action="EditBook" asp-route-id="@book.Id">edit</a>
-    <a asp-controller="Book" asp-action="DeleteBook" asp-route-id="@book.Id">delete</a>
-}
+
+<section id="form">
+    <!--form-->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="mainmenu pull-left">
+                    <ul class="nav navbar-nav collapse navbar-collapse">
+                        <li>
+                            <a asp-controller="Book" asp-action="AddBook" class="active">Добавить книгу</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                @foreach (var book in Model)
+                {
+                    <div class="container">
+                        <div class="row">
+                            <p class="pull-left">Id: @book.Id, Название: @book.BookName, Категория: @book.Category?.CategoryName, Цена: @book.Price</p>
+                            <p class="pull-right">
+                                <span>
+                                    <a asp-controller="Book" asp-action="EditBook" asp-route-id="@book.Id">edit</a>
+                                </span>
+                                <span>
+                                    <a asp-controller="Book" asp-action="DeleteBook" asp-route-id="@book.Id">delete</a>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <hr/>
+                }
+            </div>
+        </div>
+    </div>
+</section>

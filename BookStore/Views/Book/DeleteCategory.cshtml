@@ -5,16 +5,27 @@
     Layout = "_Layout";
 }
 
-<form method="post" asp-controller="Book" asp-action="AddCategory">
+<section id="form">
+    <!--form-->
     <div class="container">
-        <h2>@Model.CategoryName</h2>
-        <h2>@Model.Description</h2>
-        
-        <p>Удалить?</p>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="login-form">
+                    <!--login form-->
+                    <h2>Изменить категорию</h2>
+                    <form method="post" asp-controller="Book" asp-action="EditCategory">
+                        <div class="validation" asp-validation-summary="ModelOnly"></div>
+                        <input type="text" name="CategoryName" asp-for="CategoryName">
 
-        <hr>
+                        <textarea rows="5" maxlength="251" type="text"  name="Description" asp-for="Description"></textarea>
 
-        <input type="submit" asp-action="DeleteCategory" asp-controller="Book" asp-route-ready="@true" value="Да">
-        <input type="submit" asp-action="DeleteCategory" asp-controller="Book" asp-route-ready="@false" value="нет">
+                        <lable>Удалить?</lable>
+
+                        <input type="submit" asp-action="DeleteCategory" asp-controller="Book" asp-route-ready="@true" value="Да">
+                        <input type="submit" asp-action="DeleteCategory" asp-controller="Book" asp-route-ready="@false" value="нет">
+                    </form>
+                </div><!--/login form-->
+            </div>
+        </div>
     </div>
-</form>
+</section>
