@@ -7,6 +7,7 @@ using BookStore.Domain.ViewModels;
 using BookStore.Persistence;
 using BookStore.Repositories.Interfaces;
 using BookStore.Repositories.Repository;
+using BookStore.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,16 +23,18 @@ namespace BookStore.Controllers
         private readonly IBookRepository _bookRepository;
         private readonly IRatingRepository _ratingRepository;
         private readonly ICartItemRepository _cartItemRepository;
+        private readonly ICustomValidator _validator;
 
         public BookController(UserManager<ApplicationUser> userManager, ICategoryRepository categoryRepository,
             IBookRepository bookRepository, IRatingRepository ratingRepository,
-            ICartItemRepository cartItemRepository)
+            ICartItemRepository cartItemRepository, ICustomValidator validator)
         {
             _userManager = userManager;
             _categoryRepository = categoryRepository;
             _bookRepository = bookRepository;
             _ratingRepository = ratingRepository;
             _cartItemRepository = cartItemRepository;
+            _validator = validator;
         }
 
         [Authorize(Roles = "admin")]
@@ -59,7 +62,14 @@ namespace BookStore.Controllers
         public async Task<IActionResult> AddBook(AddBookViewModel model)
         {
             ViewBag.Categories = new SelectList(await _categoryRepository.GetAll(), "Id", "CategoryName");
-            if (ModelState.IsValid)
+
+            if (!_validator.IsValidLength(model.BookName, 2, 50))
+                ModelState.AddModelError("", "Название книги должно содержать от 2 до 50 символов");
+            else if (!_validator.IsValidLength(model.Description, 25, 250))
+                ModelState.AddModelError("", "Описание книги должно содержать от 25 до 250 символов");
+            else if (!_validator.IsValidPrice(model.Price))
+                ModelState.AddModelError("", "Цена должна принимать значение больше нуля");
+            else if (ModelState.IsValid)
             {
                 if (await _bookRepository.FindByName(model.BookName) != null)
                 {
@@ -113,7 +123,13 @@ namespace BookStore.Controllers
         {
             ViewBag.Categories = new SelectList(await _categoryRepository.GetAll(), "Id", "CategoryName");
 
-            if (ModelState.IsValid)
+            if (!_validator.IsValidLength(model.BookName, 2, 50))
+                ModelState.AddModelError("", "Название книги должно содержать от 2 до 50 символов");
+            else if (!_validator.IsValidLength(model.Description, 25, 250))
+                ModelState.AddModelError("", "Описание книги должно содержать от 25 до 250 символов");
+            else if (!_validator.IsValidPrice(model.Price))
+                ModelState.AddModelError("", "Цена должна принимать значение больше нуля");
+            else if (ModelState.IsValid)
             {
                 var book = await _bookRepository.GetById(id);
 
@@ -201,9 +217,13 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCategory(AddCategoryViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!_validator.IsValidLength(model.CategoryName, 2, 50))
+                ModelState.AddModelError("", "Название категории должно содержать от 2 до 25 символов");
+            else if (!_validator.IsValidLength(model.Description, 25, 250))
+                ModelState.AddModelError("", "Описание категории должно содержать от 25 до 250 символов");
+            else if (ModelState.IsValid)
             {
-                if((await _categoryRepository.GetAll()).Any(x=>x.CategoryName == model.CategoryName))
+                if ((await _categoryRepository.GetAll()).Any(x => x.CategoryName == model.CategoryName))
                 {
                     ModelState.AddModelError("", "Название категории уже существует");
                     return View();
@@ -245,7 +265,11 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCategory(int id, AddCategoryViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!_validator.IsValidLength(model.CategoryName, 2, 50))
+                ModelState.AddModelError("", "Название категории должно содержать от 2 до 25 символов");
+            else if (!_validator.IsValidLength(model.Description, 25, 250))
+                ModelState.AddModelError("", "Описание категории должно содержать от 25 до 250 символов");
+            else if (ModelState.IsValid)
             {
                 var category = await _categoryRepository.GetById(id);
 

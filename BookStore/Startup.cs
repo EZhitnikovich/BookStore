@@ -1,4 +1,3 @@
-using BookStore.Domain.Entities;
 using BookStore.Repositories.Interfaces;
 using BookStore.Repositories.Repository;
 using BookStore.Service;
@@ -33,6 +32,7 @@ namespace BookStore
 
             services.AddHttpContextAccessor();
             services.AddTransient<ISessionCartService, SessionCartService>();
+            services.AddScoped<ICustomValidator, CustomValidator>();
             
             services.AddAuthentication(options =>
             {

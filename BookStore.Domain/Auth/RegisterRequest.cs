@@ -15,8 +15,7 @@ namespace BookStore.Domain.Auth
         public string LastName { get; set; }
 
         [Required]
-        [EmailAddress]
-        [DataType(DataType.EmailAddress, ErrorMessage = "Некорректный формат почты")]
+        [EmailAddress(ErrorMessage = "Некорректный формат почты")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 

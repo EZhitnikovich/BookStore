@@ -20,7 +20,7 @@ namespace BookStore.Domain.ViewModels
         [DataType(DataType.Date, ErrorMessage = "Некорректный формат даты")]
         public DateTime PublicationDate { get; set; }
         
-        [Required]
+        [Required(ErrorMessage = "Необходима ссылка на изображение")]
         [DataType(DataType.Url)]
         public string Image { get; set; }
         
