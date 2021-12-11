@@ -1,14 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore", "BookStore\BookStore.csproj", "{687E91FD-1F87-4384-88F7-4E5344A7237F}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31727.386
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore", "BookStore\BookStore.csproj", "{687E91FD-1F87-4384-88F7-4E5344A7237F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Domain", "BookStore.Domain\BookStore.Domain.csproj", "{69699E98-CA57-403E-8F18-C189B3A4206E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.Domain", "BookStore.Domain\BookStore.Domain.csproj", "{69699E98-CA57-403E-8F18-C189B3A4206E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Service", "BookStore.Service\BookStore.Service.csproj", "{11205791-01C9-4B0E-BE29-469F9C906749}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.Service", "BookStore.Service\BookStore.Service.csproj", "{11205791-01C9-4B0E-BE29-469F9C906749}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Persistence", "BookStore.Persistence\BookStore.Persistence.csproj", "{26CEC1F2-52D4-480A-BE9D-04EDD3478BDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.Persistence", "BookStore.Persistence\BookStore.Persistence.csproj", "{26CEC1F2-52D4-480A-BE9D-04EDD3478BDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.Repositories", "BookStore.Repositories\BookStore.Repositories.csproj", "{5EC8A288-559B-4A15-9E82-2C4AD4B4EA9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.Repositories", "BookStore.Repositories\BookStore.Repositories.csproj", "{5EC8A288-559B-4A15-9E82-2C4AD4B4EA9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStoreTests", "BookStoreTests\BookStoreTests.csproj", "{84B002F0-3DAC-4F19-8CE5-85672E107CC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +41,15 @@ Global
 		{5EC8A288-559B-4A15-9E82-2C4AD4B4EA9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EC8A288-559B-4A15-9E82-2C4AD4B4EA9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EC8A288-559B-4A15-9E82-2C4AD4B4EA9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84B002F0-3DAC-4F19-8CE5-85672E107CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84B002F0-3DAC-4F19-8CE5-85672E107CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84B002F0-3DAC-4F19-8CE5-85672E107CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84B002F0-3DAC-4F19-8CE5-85672E107CC5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22F22AAF-E542-4618-B067-2565B6178276}
 	EndGlobalSection
 EndGlobal

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BookStore.Domain.Entities;
 using BookStore.Persistence;
 using BookStore.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Repositories.Repository
 {
@@ -13,90 +14,31 @@ namespace BookStore.Repositories.Repository
         {
         }
 
-        public BookRepository()
+        public async Task<Book> FindByName(string name)
         {
-        }
+            var books = await GetAll();
 
-        public async Task<Book> FindByName(string name, List<Book> books)
-        {
             Book book = null;
-
-            for (var i = 0; i < books.Count; i++)
-                if (books[i].BookName.ToLower() == name.ToLower())
+            
+            foreach (var item in books)
+            {
+                if (item.BookName == name)
                 {
-                    book = books[i];
-                    break;
+                    book = item;
                 }
+            }
 
             return book;
         }
 
-        public async Task<IReadOnlyList<Book>> GetByIds(ISet<int> ids, List<Book> books)
+        public override async Task<IReadOnlyList<Book>> GetAll()
         {
-            var list = new List<Book>();
-            var enumerable = ids.ToList();
-
-            foreach (var id in enumerable)
-            {
-                foreach (var book in books)
-                {
-                    if (book.Id == id)
-                    {
-                        list.Add(book);
-                        break;
-                    }
-                }
-            }
-
-            return list;
+            return await DbSet.Include(x => x.Marks).ThenInclude(u=>u.User).Include(c => c.Category).ToListAsync();
         }
-
-        public async Task<IReadOnlyList<Book>> GetWithFilter(string name, Category category, List<Book> books)
+        
+        public override async Task<Book> GetById(int id)
         {
-            var list = new List<Book>();
-
-            foreach (var book in books)
-                if (book.BookName.ToLower().Contains(name.ToLower()) &&
-                    book.Category.Equals(category))
-                    list.Add(book);
-
-            return list;
-        }
-
-        public async Task<IReadOnlyList<Book>> GetSortedBooks(List<Book> books)
-        {
-            for (var s = books.Count/2; s > 0; s/=2)
-            {
-                for (var i = 0; i < books.Count; i++)
-                {
-                    for (var j = i+s; j < books.Count; j+=s)
-                    {
-                        if (books[i].Id > books[j].Id)
-                        {
-                            var book = books[j];
-                            books[j] = books[i];
-                            books[i] = book;
-                        }
-                    }
-                }
-            }
-
-            return books;
-        }
-
-        public async Task<IReadOnlyList<Book>> GetByPrice(float lower, float higher, List<Book> books)
-        {
-            var list = new List<Book>();
-            
-            foreach (var book in books)
-            {
-                if (book.Price > lower && book.Price < higher)
-                {
-                    list.Add(book);
-                }
-            }
-            
-            return list;
+            return (await GetAll()).FirstOrDefault(x => x.Id == id);
         }
     }
 }

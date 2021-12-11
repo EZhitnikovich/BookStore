@@ -5,6 +5,8 @@ using BookStore.Domain.Auth;
 using BookStore.Domain.Entities;
 using BookStore.Domain.ViewModels;
 using BookStore.Persistence;
+using BookStore.Repositories.Interfaces;
+using BookStore.Repositories.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,32 +17,40 @@ namespace BookStore.Controllers
 {
     public class BookController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IBookRepository _bookRepository;
+        private readonly IRatingRepository _ratingRepository;
+        private readonly ICartItemRepository _cartItemRepository;
 
-        public BookController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public BookController(UserManager<ApplicationUser> userManager, ICategoryRepository categoryRepository,
+            IBookRepository bookRepository, IRatingRepository ratingRepository,
+            ICartItemRepository cartItemRepository)
         {
-            _context = context;
             _userManager = userManager;
+            _categoryRepository = categoryRepository;
+            _bookRepository = bookRepository;
+            _ratingRepository = ratingRepository;
+            _cartItemRepository = cartItemRepository;
         }
-        
+
         [Authorize(Roles = "admin")]
-        public IActionResult BookList()
+        public async Task<IActionResult> BookList()
         {
-            return View(_context.Books.Include(x=>x.Category).ToList());
+            return View(await _bookRepository.GetAll());
         }
-        
+
         [Authorize(Roles = "admin")]
-        public IActionResult CategoryList()
+        public async Task<IActionResult> CategoryList()
         {
-            return View(_context.Categories.Include(x=>x.Books).ToList());
+            return View(await _categoryRepository.GetAll());
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public IActionResult AddBook()
+        public async Task<IActionResult> AddBook()
         {
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAll(), "Id", "CategoryName");
             return View();
         }
 
@@ -48,10 +58,10 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBook(AddBookViewModel model)
         {
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAll(), "Id", "CategoryName");
             if (ModelState.IsValid)
             {
-                if (_context.Books.Any(x => x.BookName == model.BookName))
+                if (await _bookRepository.FindByName(model.BookName) != null)
                 {
                     ModelState.AddModelError("", "Данная книга уже существует");
                     return View();
@@ -66,8 +76,7 @@ namespace BookStore.Controllers
                     Price = model.Price,
                     PublicationDate = model.PublicationDate
                 };
-                _context.Add(book);
-                await _context.SaveChangesAsync();
+                await _bookRepository.Add(book);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -76,10 +85,10 @@ namespace BookStore.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public IActionResult EditBook(int id)
+        public async Task<IActionResult> EditBook(int id)
         {
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
-            var book = _context.Books.Find(id);
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAll(), "Id", "CategoryName");
+            var book = await _bookRepository.GetById(id);
 
             if (book != null)
             {
@@ -102,34 +111,36 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<IActionResult> EditBook(int id, AddBookViewModel model)
         {
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAll(), "Id", "CategoryName");
 
             if (ModelState.IsValid)
             {
-                var book = _context.Books.Find(id);
+                var book = await _bookRepository.GetById(id);
 
-                book.CategoryId = model.CategoryId;
-                book.BookName = model.BookName;
-                book.Image = model.Image;
-                book.Description = model.Description;
-                book.Price = model.Price;
-                book.PublicationDate = model.PublicationDate;
+                if (book != null)
+                {
+                    book.CategoryId = model.CategoryId;
+                    book.BookName = model.BookName;
+                    book.Image = model.Image;
+                    book.Description = model.Description;
+                    book.Price = model.Price;
+                    book.PublicationDate = model.PublicationDate;
 
-                _context.Update(book);
-                
-                await _context.SaveChangesAsync();
+                    await _bookRepository.Update(book);
+                }
+
                 return RedirectToAction("Index", "Home");
             }
-            
+
             return View(model);
         }
-        
+
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public IActionResult DeleteBook(int id)
+        public async Task<IActionResult> DeleteBook(int id)
         {
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
-            var book = _context.Books.Find(id);
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAll(), "Id", "CategoryName");
+            var book = await _bookRepository.GetById(id);
 
             if (book != null)
             {
@@ -144,37 +155,38 @@ namespace BookStore.Controllers
                 };
                 return View(addBookViewModel);
             }
-            
+
             return NotFound();
         }
-        
+
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteBook(int id, bool ready)
         {
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "CategoryName");
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAll(), "Id", "CategoryName");
 
-            var a = _context.Books.Find(id).Category;
+            var category = (await _bookRepository.GetById(id)).Category;
 
-            ViewBag.CategoryName = a.CategoryName;
-            
+            ViewBag.CategoryName = category.CategoryName;
+
             if (ModelState.IsValid)
             {
                 if (ready)
                 {
-                    var book = _context.Books.Include(m=>m.Marks).SingleOrDefault(x=>x.Id == id);
+                    var book = await _bookRepository.GetById(id);
 
                     if (book != null && book.Marks.Any())
                     {
-                        _context.RemoveRange(book.Marks);
-                        _context.CartItems.RemoveRange(_context.CartItems.Include(b=>b.Book).Where(x=>x.Book.Id == id));
-                        _context.Books.Remove(book);
+                        await _ratingRepository.RemoveRange(book.Marks);
+                        await _cartItemRepository.RemoveRange(
+                            (await _cartItemRepository.GetAll()).Where(x => x.Book.Id == id));
+                        await _bookRepository.Delete(book);
                     }
-                    
-                    await _context.SaveChangesAsync();
                 }
+
                 return RedirectToAction("BookList", "Book");
             }
+
             return View();
         }
 
@@ -191,31 +203,30 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_context.Categories.Any(x => x.CategoryName == model.CategoryName))
+                if((await _categoryRepository.GetAll()).Any(x=>x.CategoryName == model.CategoryName))
                 {
                     ModelState.AddModelError("", "Название категории уже существует");
                     return View();
                 }
-                
+
                 var category = new Category()
                 {
                     CategoryName = model.CategoryName,
                     Description = model.Description
                 };
-                
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+
+                await _categoryRepository.Add(category);
                 return RedirectToAction("Index", "Home");
             }
 
             return View();
         }
-        
+
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public IActionResult EditCategory(int id)
+        public async Task<IActionResult> EditCategory(int id)
         {
-            var category = _context.Categories.Find(id);
+            var category = await _categoryRepository.GetById(id);
 
             if (category != null)
             {
@@ -236,25 +247,27 @@ namespace BookStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var category = _context.Categories.Find(id);
+                var category = await _categoryRepository.GetById(id);
 
-                category.CategoryName = model.CategoryName;
-                category.Description = model.Description;
+                if (category != null)
+                {
+                    category.CategoryName = model.CategoryName;
+                    category.Description = model.Description;
 
-                _context.Update(category);
-                
-                await _context.SaveChangesAsync();
+                    await _categoryRepository.Update(category);
+                }
+
                 return RedirectToAction("Index", "Home");
             }
-            
+
             return View();
         }
-        
+
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public IActionResult DeleteCategory(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = _context.Categories.Find(id);
+            var category = await _categoryRepository.GetById(id);
 
             if (category != null)
             {
@@ -265,10 +278,10 @@ namespace BookStore.Controllers
                 };
                 return View(addCategoryViewModel);
             }
-            
+
             return NotFound();
         }
-        
+
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteCategory(int id, bool ready)
@@ -277,11 +290,12 @@ namespace BookStore.Controllers
             {
                 if (ready)
                 {
-                    _context.Remove(_context.Categories.Find(id));
-                    await _context.SaveChangesAsync();
+                    await _categoryRepository.Delete(await _categoryRepository.GetById(id));
                 }
+
                 return RedirectToAction("CategoryList", "Book");
             }
+
             return View();
         }
 
@@ -290,18 +304,21 @@ namespace BookStore.Controllers
         {
             value = value <= 0 ? 1 : value;
             value = value > 5 ? 5 : value;
-            
-            var book = _context.Books.Find(id);
+
+            var book = await _bookRepository.GetById(id);
 
             var user = await _userManager.FindByEmailAsync(User.Identity.Name);
 
             if (book != null && user != null)
             {
-                var rating = _context.Marks.SingleOrDefault(x=> x.Book.Id == book.Id && x.User.Id == user.Id);
+                var rating =
+                    (await _ratingRepository.GetAll()).SingleOrDefault(
+                        x => x.Book.Id == book.Id && x.User.Id == user.Id);
 
                 if (rating != null)
                 {
                     rating.Mark = value;
+                    await _ratingRepository.Update(rating);
                 }
                 else
                 {
@@ -311,11 +328,9 @@ namespace BookStore.Controllers
                         Book = book,
                         Mark = value
                     };
-                    
-                    _context.Marks.Add(rating);
+
+                    await _ratingRepository.Add(rating);
                 }
-                
-                await _context.SaveChangesAsync();
             }
 
             return RedirectToAction("Index", "Home");

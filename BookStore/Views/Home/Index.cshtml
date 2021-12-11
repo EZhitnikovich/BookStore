@@ -82,7 +82,14 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <p>@Math.Round(item.Marks.Average(x=>x.Mark),1)</p>
+                                            @if (item.Marks.Any())
+                                            {
+                                                <p>@Math.Round(item.Marks.Average(x => x.Mark), 1)</p>
+                                            }
+                                            else
+                                            {
+                                                <p>0</p>
+                                            }
                                         </li>
                                     </ul>
                                 </div>

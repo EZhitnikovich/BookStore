@@ -1,3 +1,4 @@
+using BookStore.Domain.Entities;
 using BookStore.Repositories.Interfaces;
 using BookStore.Repositories.Repository;
 using BookStore.Service;
@@ -25,8 +26,11 @@ namespace BookStore
             services.AddAppIdentity(Configuration);
 
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IBookRepository, BookRepository>();
-            
+            services.AddScoped(typeof(IBookRepository), typeof(BookRepository));
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
+            services.AddScoped<IRatingRepository, RatingRepository>();
+
             services.AddHttpContextAccessor();
             services.AddTransient<ISessionCartService, SessionCartService>();
             

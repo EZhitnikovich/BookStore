@@ -19,15 +19,10 @@ namespace BookStore.Repositories.Repository
             DbSet = _context.Set<TEntity>();
         }
 
-        protected GenericRepository()
-        {
-        }
-
-        public async Task<int> Add(TEntity entity)
+        public virtual async Task<int> Add(TEntity entity)
         {
             if (entity is null)
-                //TODO: add custom exception
-                throw new Exception($"{nameof(entity)} is null");
+                throw new ArgumentNullException($"{nameof(entity)} is null");
 
             await DbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
@@ -35,28 +30,36 @@ namespace BookStore.Repositories.Repository
             return entity.Id;
         }
 
-        public async Task Delete(TEntity entity)
+        public virtual async Task Delete(TEntity entity)
         {
             if (entity is null)
-                //TODO: add custom exception
-                throw new Exception($"{nameof(entity)} is null");
+                throw new ArgumentNullException($"{nameof(entity)} is null");
 
             DbSet.Remove(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(TEntity entity)
+        public virtual async Task RemoveRange(IEnumerable<TEntity> entities)
         {
+            DbSet.RemoveRange(entities);
+            await _context.SaveChangesAsync();
+        }
+
+        public virtual async Task Update(TEntity entity)
+        {
+            if (entity is null)
+                throw new ArgumentNullException($"{nameof(entity)} is null");
+
             DbSet.Update(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<TEntity> GetById(int id)
+        public virtual async Task<TEntity> GetById(int id)
         {
             return await DbSet.FindAsync(id);
         }
 
-        public async Task<IReadOnlyList<TEntity>> GetAll()
+        public virtual async Task<IReadOnlyList<TEntity>> GetAll()
         {
             return await DbSet.ToListAsync();
         }

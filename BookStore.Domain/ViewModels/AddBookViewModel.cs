@@ -17,7 +17,7 @@ namespace BookStore.Domain.ViewModels
         public string Description { get; set; }
         
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.Date, ErrorMessage = "Некорректный формат даты")]
         public DateTime PublicationDate { get; set; }
         
         [Required]

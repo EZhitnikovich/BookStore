@@ -7,8 +7,9 @@ namespace BookStore.Repositories.Interfaces
     public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         Task<int> Add(TEntity entity);
-        Task Delete(TEntity book);
-        Task Update(TEntity book);
+        Task Delete(TEntity entity);
+        Task RemoveRange(IEnumerable<TEntity> entities);
+        Task Update(TEntity entity);
         Task<TEntity> GetById(int id);
         Task<IReadOnlyList<TEntity>> GetAll();
     }
